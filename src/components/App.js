@@ -6,6 +6,7 @@ import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import Home from "./Home";
 import BaseSelector from "./BaseSelector";
 import Builder from "./Builder";
+import Quote from "./Quote";
 
 export default class App extends Component {
   constructor(props) {
@@ -20,6 +21,7 @@ export default class App extends Component {
           <Route sensitive exact path="/" component={Home} />
           <Route path="/select" component={BaseSelector} />
           <Route path="/builder" component={Builder} />
+          <Route path="/quote" component={Quote} />
         </Switch>
       </Router>
     );

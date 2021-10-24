@@ -13,7 +13,7 @@ import Exterior from "./Exterior";
 function Menu() {
   let { id } = useParams();
   return (
-    <div className="p-4">
+    <div className="no-flow p-4">
       {id === "interior" && <Interior />}
       {id === "exterior" && <Exterior />}
     </div>
@@ -25,7 +25,7 @@ class Sidebar extends Component {
     const { path, url } = this.props.match;
 
     return (
-      <div className="col-lg-3 p-0">
+      <div className="col-lg-3 p-0 mx-height">
         <div className="c-select p-5">
           <ul className="nav nav-pills nav-fill mt-2">
             <li className="nav-item">

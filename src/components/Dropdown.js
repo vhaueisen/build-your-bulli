@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import Chevron from "./../images/Chevron.svg";
 
-export default function Dropdown({ id, name, options, onClick }) {
+export default function Dropdown({ id, options, name, onClick }) {
+  const [selected, select] = useState(-1);
   return (
-    <div className="dropdown">
+    <div className="dropdown mt-3">
       <button
         className="btn dropdown-toggle s-drop"
         type="button"
@@ -11,7 +12,7 @@ export default function Dropdown({ id, name, options, onClick }) {
         data-bs-toggle="dropdown"
         aria-expanded="false"
       >
-        {name}
+        {selected < 0 ? name : options[selected].name}
         <img src={Chevron} className="s-drop-i" alt="..." />
       </button>
       <ul className="dropdown-menu w-100 s-drop-ul" aria-labelledby={id}>
@@ -19,7 +20,7 @@ export default function Dropdown({ id, name, options, onClick }) {
           return (
             <li key={i} className="s-drop-li">
               <div className="d-flex flex-row">
-                {x.color && (
+                {x.color != null && (
                   <div
                     className="s-drop-c"
                     style={{ background: x.color }}
@@ -27,16 +28,19 @@ export default function Dropdown({ id, name, options, onClick }) {
                 )}
                 <div
                   className="flex-grow-1 dropdown-item s-drop-n"
-                  onClick={(e) => onClick(e, i)}
+                  onClick={(e) => {
+                    select(i);
+                    onClick(e, i);
+                  }}
                 >
                   <div>{x.name}</div>
-                  {x.desc && (
-                    <div>
-                      <p>{x.desc}</p>
-                    </div>
+                  {x.desc != null && (
+                    <div className="s-drop-p s-drop-desc">{x.desc}</div>
                   )}
                 </div>
-                {x.price && <div className="s-drop-p">{"€" + x.price}</div>}
+                {x.price != null && (
+                  <div className="s-drop-p">{`€${x.price.toFixed(2)}`}</div>
+                )}
               </div>
             </li>
           );
