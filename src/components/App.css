@@ -86,6 +86,9 @@
 
 .g-container {
   background: #f3f3f3;
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
 }
 
 #root .nav-link {
@@ -254,7 +257,8 @@ input[type="checkbox"]:focus {
 }
 
 .no-flow {
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   flex-grow: 1;
 }
 

@@ -1,0 +1,192 @@
+import * as THREE from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { EXRLoader } from "three/examples/jsm/loaders/EXRLoader.js";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import kombiModel from "./../3d/models/Kombi.glb";
+import ambientTexture from "./../3d/textures/Ambient.exr";
+
+export const Engine = {
+  Elements: [
+    {
+      name: "Bottom_Body",
+      contents: ["Mesh003_1"],
+      state: true,
+    },
+    {
+      name: "Upper_Body",
+      contents: ["Mesh003_4"],
+      state: true,
+    },
+    {
+      name: "transparent_shader",
+      contents: [
+        "pasted__transparent_shader_001",
+        "pasted__transparent_shader_002",
+      ],
+      state: true,
+    },
+    {
+      name: "wallet",
+      contents: ["polySurface3"],
+      state: true,
+    },
+  ],
+  cameras: [
+    {
+      position: { x: 0, y: 0, z: 3 },
+      rotation: [0, 0, 0],
+      target: { x: 0, y: 0, z: 0 },
+    },
+    {
+      position: {
+        x: -0.6547224399100854,
+        y: 1.519212061877433,
+        z: -0.3042745665050451,
+      },
+      rotation: [-2.050345262799172, 0.44502997357104607, 2.4501314070268014],
+      target: {
+        x: -0.9465079796554101,
+        y: 0.9764329533839111,
+        z: -0.022008988846454754,
+      },
+    },
+  ],
+  transparentKey: "transparent_shader",
+  gltfLoader: new GLTFLoader(),
+  exrLoader: new EXRLoader(),
+  scene: new THREE.Scene(),
+  renderer: new THREE.WebGLRenderer({
+    alpha: true,
+  }),
+  pmremGenerator: null,
+  size: null,
+  camera: null,
+  modelscale: 1,
+  offsetY: -0.35,
+  glass: null,
+  controls: null,
+};
+
+export function Render(ref) {
+  Engine.size = {
+    w: ref.mount.offsetWidth,
+    h: window.innerHeight,
+  };
+  Engine.pmremGenerator = new THREE.PMREMGenerator(Engine.renderer);
+  Engine.camera = new THREE.PerspectiveCamera(
+    75,
+    Engine.size.w / Engine.size.h,
+    0.1,
+    100
+  );
+  Engine.renderer.setSize(Engine.size.w, Engine.size.h);
+  Engine.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  Engine.camera.position.x = Engine.cameras[0].position.x;
+  Engine.camera.position.y = Engine.cameras[0].position.y;
+  Engine.camera.position.z = Engine.cameras[0].position.z;
+  Engine.controls = new OrbitControls(
+    Engine.camera,
+    Engine.renderer.domElement
+  );
+  Engine.controls.enableDamping = true;
+  let exrCubeRenderTarget, exrBackground;
+  THREE.DefaultLoadingManager.onLoad = function () {
+    Engine.pmremGenerator.dispose();
+  };
+  Engine.exrLoader
+    .setDataType(THREE.UnsignedByteType)
+    .load(ambientTexture, function (texture) {
+      exrCubeRenderTarget = Engine.pmremGenerator.fromEquirectangular(texture);
+      exrBackground = exrCubeRenderTarget.texture;
+      texture.dispose();
+      Engine.gltfLoader.load(kombiModel, function (gltf) {
+        gltf.scene.scale.set(
+          Engine.modelscale,
+          Engine.modelscale,
+          Engine.modelscale
+        );
+        gltf.scene.position.y = Engine.offsetY;
+        gltf.scene.traverse((node) => {
+          if (node.isMesh) {
+            if (node.name.includes(Engine.transparentKey))
+              node.material = new THREE.MeshPhysicalMaterial({
+                color: 0xb1becf,
+                metalness: 0,
+                roughness: 0,
+                ior: 1.5,
+                envMap: Engine.exrBackground,
+                envMapIntensity: 1,
+                transmission: 0.2,
+                opacity: 0.35,
+                side: THREE.DoubleSide,
+                transparent: true,
+              });
+            node.material.envMap = exrBackground;
+          }
+        });
+        Engine.scene.add(gltf.scene);
+        ref.setState({
+          loading: false,
+        });
+      });
+    });
+  Engine.pmremGenerator.compileEquirectangularShader();
+  Engine.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  Engine.renderer.outputEncoding = THREE.sRGBEncoding;
+  Engine.renderer.toneMappingExposure = 0.85;
+  tick();
+  return Engine.renderer.domElement;
+}
+
+export function ToggleElement(name, state) {
+  Engine.Elements.forEach((e) => {
+    if (e.name === name) {
+      e.contents.forEach((n) => {
+        var object = Engine.scene.getObjectByName(n);
+        object.visible = state;
+      });
+      e.state = state;
+    }
+  });
+}
+
+export function ToggleColor(name, color) {
+  Engine.Elements.forEach((e) => {
+    if (e.name === name) {
+      e.contents.forEach((n) => {
+        var object = Engine.scene.getObjectByName(n);
+        if (object.isMesh) {
+          const c = new THREE.Color(
+            "rgb(" +
+              color
+                .match(/[A-Za-z0-9]{2}/g)
+                .map(function (v) {
+                  return parseInt(v, 16);
+                })
+                .join(",") +
+              ")"
+          );
+          object.material.color = c;
+        }
+      });
+    }
+  });
+}
+
+export function ToggleCamera(i) {
+  Engine.controls.reset();
+  Engine.camera.position.x = Engine.cameras[i].position.x;
+  Engine.camera.position.y = Engine.cameras[i].position.y;
+  Engine.camera.position.z = Engine.cameras[i].position.z;
+  Engine.camera.rotation.fromArray(Engine.cameras[i].rotation);
+  Engine.controls.target.x = Engine.cameras[i].target.x;
+  Engine.controls.target.y = Engine.cameras[i].target.y;
+  Engine.controls.target.z = Engine.cameras[i].target.z;
+  Engine.controls.update();
+}
+
+export const tick = () => {
+  Engine.controls.update();
+  Engine.renderer.render(Engine.scene, Engine.camera);
+  requestAnimationFrame(tick);
+};

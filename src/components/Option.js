@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { ToggleElement } from "./Engine";
 
 export default class Option extends Component {
   constructor(props) {
@@ -13,6 +14,8 @@ export default class Option extends Component {
     this.setState({
       selected: event.target.value,
     });
+    console.log("event.target.value");
+    ToggleElement("Upper_Body", false);
   }
 
   render() {

@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import Interior from "./Interior";
 import Exterior from "./Exterior";
+import { ToggleCamera } from "./Engine";
 
 function Menu() {
   let { id } = useParams();
@@ -33,6 +34,7 @@ class Sidebar extends Component {
                 className="nav-link"
                 activeClassName="active"
                 to={`${url}/exterior`}
+                onClick={() => ToggleCamera(0)}
               >
                 EXTERIOR
               </NavLink>
@@ -42,6 +44,7 @@ class Sidebar extends Component {
                 className="nav-link"
                 activeClassName="active"
                 to={`${url}/interior`}
+                onClick={() => ToggleCamera(1)}
               >
                 INTERIOR
               </NavLink>
