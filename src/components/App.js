@@ -18,10 +18,18 @@ export default class App extends Component {
     return (
       <Router>
         <Switch>
-          <Route sensitive exact path="/" component={Home} />
-          <Route path="/select" component={BaseSelector} />
-          <Route path="/builder" component={Builder} />
-          <Route path="/quote" component={Quote} />
+          <Route sensitive exact path="/">
+            <Home />
+          </Route>
+          <Route path="/select" component={BaseSelector}>
+            <BaseSelector />
+          </Route>
+          <Route path="/builder" component={Builder}>
+            <Builder />
+          </Route>
+          <Route path="/quote" component={Quote}>
+            <Quote />
+          </Route>
         </Switch>
       </Router>
     );

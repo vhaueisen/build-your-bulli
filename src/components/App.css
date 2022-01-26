@@ -293,3 +293,7 @@ input[type="checkbox"]:focus {
   border-radius: 8px;
   height: 8.25rem;
 }
+
+.squareColor {
+  width: 52px;
+}

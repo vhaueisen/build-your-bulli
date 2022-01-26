@@ -33,21 +33,21 @@ export const Engine = {
   ],
   cameras: [
     {
-      position: { x: 0, y: 0, z: 3 },
+      position: { x: 0, y: 1.25, z: 4.4 },
       rotation: [0, 0, 0],
       target: { x: 0, y: 0, z: 0 },
     },
     {
       position: {
-        x: -0.6547224399100854,
-        y: 1.519212061877433,
-        z: -0.3042745665050451,
+        x: -0.33,
+        y: 1.1,
+        z: 0.79,
       },
-      rotation: [-2.050345262799172, 0.44502997357104607, 2.4501314070268014],
+      rotation: [2.47, -0.47, -2.8],
       target: {
-        x: -0.9465079796554101,
-        y: 0.9764329533839111,
-        z: -0.022008988846454754,
+        x: 0,
+        y: 1.15,
+        z: 1.3,
       },
     },
   ],
@@ -89,6 +89,8 @@ export function Render(ref) {
     Engine.renderer.domElement
   );
   Engine.controls.enableDamping = true;
+  Engine.controls.minPolarAngle = 0.2;
+  Engine.controls.maxPolarAngle = Math.PI / 2 - 0.2;
   let exrCubeRenderTarget, exrBackground;
   THREE.DefaultLoadingManager.onLoad = function () {
     Engine.pmremGenerator.dispose();
@@ -188,5 +190,12 @@ export function ToggleCamera(i) {
 export const tick = () => {
   Engine.controls.update();
   Engine.renderer.render(Engine.scene, Engine.camera);
+  // console.log(
+  //   `Position: ${JSON.stringify(
+  //     Engine.camera.position
+  //   )} Rotation: ${JSON.stringify(
+  //     Engine.camera.rotation
+  //   )} Target: ${JSON.stringify(Engine.controls.target)}`
+  // );
   requestAnimationFrame(tick);
 };

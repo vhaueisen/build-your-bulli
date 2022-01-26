@@ -7,16 +7,16 @@ import {
   useParams,
   Redirect,
 } from "react-router-dom";
-import Interior from "./Interior";
-import Exterior from "./Exterior";
+import CustomizationPanel from "./CustomizationPanel";
 import { ToggleCamera } from "./Engine";
+import { T1S } from "./../Model/T1S";
 
 function Menu() {
   let { id } = useParams();
   return (
     <div className="no-flow p-4">
-      {id === "interior" && <Interior />}
-      {id === "exterior" && <Exterior />}
+      {id === "interior" && <CustomizationPanel model={T1S.interior} />}
+      {id === "exterior" && <CustomizationPanel model={T1S.exterior} />}
     </div>
   );
 }

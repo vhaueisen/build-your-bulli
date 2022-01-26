@@ -14,8 +14,8 @@ export default class Option extends Component {
     this.setState({
       selected: event.target.value,
     });
-    console.log("event.target.value");
-    ToggleElement("Upper_Body", false);
+    //console.log("event.target.value");
+    //ToggleElement("Upper_Body", false);
   }
 
   render() {
@@ -29,15 +29,11 @@ export default class Option extends Component {
                 <input
                   className="form-check-input s-check-i"
                   type="checkbox"
-                  id={`${this.props.id}${i}`}
                   checked={this.state.selected === this.props.options[i]}
                   value={this.props.options[i]}
                   onChange={this.handleInputChange}
                 />
-                <label
-                  className="form-check-label"
-                  htmlFor={`${this.props.id}${i}`}
-                >
+                <label className="form-check-label">
                   {this.props.options[i]}
                 </label>
               </div>
