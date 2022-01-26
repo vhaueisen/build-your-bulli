@@ -5,6 +5,21 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import kombiModel from "./../3d/models/Kombi.glb";
 import ambientTexture from "./../3d/textures/Ambient.exr";
 
+var EngineEventHandler = function (options) {
+  // Create a DOM EventTarget object
+  var target = document.createTextNode(null);
+
+  // Pass EventTarget interface calls to DOM EventTarget object
+  this.addEventListener = target.addEventListener.bind(target);
+  this.removeEventListener = target.removeEventListener.bind(target);
+  this.dispatchEvent = target.dispatchEvent.bind(target);
+
+  // Room your your constructor code
+};
+
+// Create an instance of your event target
+export const EngineEvent = new EngineEventHandler();
+
 export const Engine = {
   Elements: [
     {
@@ -91,6 +106,8 @@ export function Render(ref) {
   Engine.controls.enableDamping = true;
   Engine.controls.minPolarAngle = 0.2;
   Engine.controls.maxPolarAngle = Math.PI / 2 - 0.2;
+  Engine.controls.minDistance = 3.5;
+  Engine.controls.maxDistance = 10;
   let exrCubeRenderTarget, exrBackground;
   THREE.DefaultLoadingManager.onLoad = function () {
     Engine.pmremGenerator.dispose();
@@ -130,6 +147,9 @@ export function Render(ref) {
         ref.setState({
           loading: false,
         });
+        // Dispatch loaded event
+        var evt = new Event("Loaded");
+        EngineEvent.dispatchEvent(evt);
       });
     });
   Engine.pmremGenerator.compileEquirectangularShader();
@@ -140,42 +160,41 @@ export function Render(ref) {
   return Engine.renderer.domElement;
 }
 
-export function ToggleElement(name, state) {
-  Engine.Elements.forEach((e) => {
-    if (e.name === name) {
-      e.contents.forEach((n) => {
-        var object = Engine.scene.getObjectByName(n);
-        object.visible = state;
-      });
-      e.state = state;
-    }
+export function ChangeObjectVisibility(names, state) {
+  names.forEach((n) => {
+    var object = Engine.scene.getObjectByName(n);
+    if (object != null && object.isMesh) object.visible = state;
+    console.log(object);
   });
 }
 
-export function ToggleColor(name, color) {
-  Engine.Elements.forEach((e) => {
-    if (e.name === name) {
-      e.contents.forEach((n) => {
-        var object = Engine.scene.getObjectByName(n);
-        if (object.isMesh) {
-          const c = new THREE.Color(
-            "rgb(" +
-              color
-                .match(/[A-Za-z0-9]{2}/g)
-                .map(function (v) {
-                  return parseInt(v, 16);
-                })
-                .join(",") +
-              ")"
-          );
-          object.material.color = c;
-        }
-      });
+export function ChangeObjectColor(names, color) {
+  names.forEach((n, i) => {
+    var object = Engine.scene.getObjectByName(n);
+    if (object != null && object.isMesh) {
+      const c = new THREE.Color(
+        "rgb(" +
+          color[i]
+            .match(/[A-Za-z0-9]{2}/g)
+            .map(function (v) {
+              return parseInt(v, 16);
+            })
+            .join(",") +
+          ")"
+      );
+      object.material.color = c;
     }
   });
 }
 
 export function ToggleCamera(i) {
+  if (i === 1) {
+    Engine.controls.minDistance = 0.015;
+    Engine.controls.maxDistance = 0.64;
+  } else {
+    Engine.controls.minDistance = 3.5;
+    Engine.controls.maxDistance = 10;
+  }
   Engine.controls.reset();
   Engine.camera.position.x = Engine.cameras[i].position.x;
   Engine.camera.position.y = Engine.cameras[i].position.y;
@@ -197,5 +216,7 @@ export const tick = () => {
   //     Engine.camera.rotation
   //   )} Target: ${JSON.stringify(Engine.controls.target)}`
   // );
+
+  //console.log(Engine.controls.getDistance());
   requestAnimationFrame(tick);
 };

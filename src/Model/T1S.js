@@ -8,9 +8,10 @@ export const T1S = {
       name: ["Top", "Down"],
       kind: "colorPicker",
       options: [
-        ["red", "blue", "green", "pink", "white", "black"],
-        ["red", "blue", "green", "pink", "white", "black"],
+        ["#E2E4E1", "#0755A1", "#0F6744", "pink", "white", "black"],
+        ["#A94246", "#0755A1", "#0F6744", "pink", "white", "black"],
       ],
+      target: ["T1_body", "T1_body"],
     },
     {
       name: "Windows",
@@ -64,12 +65,15 @@ export const T1S = {
       options: [
         {
           name: "Back",
+          target: ["T1_bagageiro1"],
         },
         {
           name: "Front",
+          target: ["T1_bagageiro2"],
         },
         {
           name: "Full",
+          target: ["T1_bagageiro3"],
         },
       ],
       kind: "dropdown",
