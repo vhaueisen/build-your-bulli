@@ -9,14 +9,17 @@ import {
 } from "react-router-dom";
 import CustomizationPanel from "./CustomizationPanel";
 import { ToggleCamera } from "./Engine";
-import { T1S } from "./../Model/T1S";
 
-function Menu() {
+function Menu({ machine }) {
   let { id } = useParams();
   return (
     <div className="no-flow p-4">
-      {id === "interior" && <CustomizationPanel model={T1S.interior} />}
-      {id === "exterior" && <CustomizationPanel model={T1S.exterior} />}
+      {id === "interior" && (
+        <CustomizationPanel machine={machine} index={"interior"} />
+      )}
+      {id === "exterior" && (
+        <CustomizationPanel machine={machine} index={"exterior"} />
+      )}
     </div>
   );
 }
@@ -53,7 +56,7 @@ class Sidebar extends Component {
         </div>
         <Switch>
           <Route path={`${path}/:id`}>
-            <Menu />
+            <Menu machine={this.props.machine} />
           </Route>
           <Route path={path}>
             <Redirect to={`${url}/exterior`} push />

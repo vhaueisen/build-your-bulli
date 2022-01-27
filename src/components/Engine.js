@@ -161,7 +161,7 @@ export function Render(ref) {
 }
 
 export function ChangeObjectVisibility(names, state) {
-  names.forEach((n) => {
+  [].concat(names || []).forEach((n) => {
     var object = Engine.scene.getObjectByName(n);
     if (object != null && object.isMesh) object.visible = state;
     console.log(object);
@@ -169,12 +169,12 @@ export function ChangeObjectVisibility(names, state) {
 }
 
 export function ChangeObjectColor(names, color) {
-  names.forEach((n, i) => {
+  [].concat(names || []).forEach((n) => {
     var object = Engine.scene.getObjectByName(n);
     if (object != null && object.isMesh) {
       const c = new THREE.Color(
         "rgb(" +
-          color[i]
+          color
             .match(/[A-Za-z0-9]{2}/g)
             .map(function (v) {
               return parseInt(v, 16);

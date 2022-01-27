@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ChangeObjectColor, EngineEvent } from "./Engine";
+import { EngineEvent } from "./Engine";
 import SquareColor from "./SquareColor";
 
 export default class ColorPicker extends Component {
@@ -12,17 +12,20 @@ export default class ColorPicker extends Component {
   }
 
   onLoad = () => {
-    this.handleColor(0, 0);
+    for (let index = 0; index < this.props.name.length; index++) {
+      this.handleColor(index, 0);
+    }
   };
 
   handleColor(index, j) {
     var s = this.state.selected;
     s[index] = j;
     this.setState({ selected: s });
-    ChangeObjectColor(this.props.target, [
-      this.props.options[0][s[0]],
-      this.props.options[1][s[1]],
-    ]);
+    this.props.machine.handler[this.props.action](
+      this.props.index,
+      this.props.options[index][j],
+      this.props.options[index][j]
+    );
   }
 
   mapPropsToPicker() {

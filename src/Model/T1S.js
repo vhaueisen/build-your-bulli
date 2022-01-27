@@ -8,10 +8,10 @@ export const T1S = {
       name: ["Top", "Down"],
       kind: "colorPicker",
       options: [
-        ["#E2E4E1", "#0755A1", "#0F6744", "pink", "white", "black"],
-        ["#A94246", "#0755A1", "#0F6744", "pink", "white", "black"],
+        ["#E2E4E1", "#222021", "#CBA506", "#0F6744", "#0755A1", "#A94246"],
+        ["#A94246", "#0755A1", "#0F6744", "#CBA506", "#222021", "#E2E4E1"],
       ],
-      target: ["T1_body", "T1_body"],
+      action: "setColor",
     },
     {
       name: "Windows",
@@ -22,34 +22,45 @@ export const T1S = {
       options: [
         {
           name: "Standard",
+          target: "",
         },
         {
           name: "Safari",
+          target: "",
         },
       ],
       kind: "dropdown",
+      action: "setModel",
     },
     {
       name: "Curtains?",
       options: ["Yes", "No"],
+      target: "T1_body",
       kind: "check",
+      action: "setState",
     },
     {
       name: "Curtain color",
       options: [
         {
           name: "No color insert / pure chrome",
+          color: "chrome",
+          target: "",
         },
         {
           name: "Color 01",
-          color: "black",
+          color: "#000",
+          target: "",
         },
         {
           name: "Color 02",
-          color: "red",
+          color: "#fafafa",
+          target: "",
         },
       ],
       kind: "dropdown",
+      action: "setColor",
+      target: [],
     },
     {
       name: "Luggage Rack",
@@ -59,29 +70,34 @@ export const T1S = {
       name: "Would you like luggage rack?",
       options: ["Yes", "No"],
       kind: "check",
+      action: "setState",
+      target: "",
     },
     {
       name: "Model",
       options: [
         {
           name: "Back",
-          target: ["T1_bagageiro1"],
+          target: "T1_bagageiro1",
         },
         {
           name: "Front",
-          target: ["T1_bagageiro2"],
+          target: "T1_bagageiro2",
         },
         {
           name: "Full",
-          target: ["T1_bagageiro3"],
+          target: "T1_bagageiro3",
         },
       ],
       kind: "dropdown",
+      action: "setModel",
     },
     {
       name: "Would you like removable stairs?",
       options: ["Yes", "No"],
       kind: "check",
+      action: "setState",
+      target: "",
     },
     {
       name: "Bumpers",
@@ -92,24 +108,30 @@ export const T1S = {
       options: [
         {
           name: "USA style",
+          target: "",
         },
         {
           name: "Euro style",
+          target: "",
         },
       ],
       kind: "dropdown",
+      action: "setModel",
     },
     {
       name: "Back",
       options: [
         {
           name: "USA style",
+          target: "",
         },
         {
           name: "Euro style",
+          target: "",
         },
       ],
       kind: "dropdown",
+      action: "setModel",
     },
     {
       name: "Mirrors",
@@ -120,12 +142,15 @@ export const T1S = {
       options: [
         {
           name: "Modelo 1",
+          target: "",
         },
         {
           name: "Modelo 2",
+          target: "",
         },
       ],
       kind: "dropdown",
+      action: "setModel",
     },
     {
       name: "Moldings",
@@ -135,6 +160,7 @@ export const T1S = {
       name: "Would you like side moldings?",
       options: ["Yes", "No"],
       kind: "check",
+      action: "setState",
     },
     {
       name: "Choose strip Color",
@@ -152,6 +178,7 @@ export const T1S = {
         },
       ],
       kind: "dropdown",
+      action: "setColor",
     },
     {
       name: "Extra Lights",
@@ -161,11 +188,13 @@ export const T1S = {
       name: "Reversing light",
       options: ["Yes", "No"],
       kind: "check",
+      action: "setState",
     },
     {
       name: "Fog light",
       options: ["Yes", "No"],
       kind: "check",
+      action: "setState",
     },
     {
       name: "Indicators",
@@ -185,6 +214,7 @@ export const T1S = {
         },
       ],
       kind: "dropdown",
+      action: "setModel",
     },
     {
       name: "Back",
@@ -200,6 +230,7 @@ export const T1S = {
         },
       ],
       kind: "dropdown",
+      action: "setModel",
     },
     {
       name: "Wheels",
@@ -209,6 +240,7 @@ export const T1S = {
       name: "How would you like the rims?",
       options: ["White", "Silver"],
       kind: "check",
+      action: "setColor",
     },
     // {
     //   name: "Volkswagen’s logo on hubcaps?",
@@ -231,6 +263,7 @@ export const T1S = {
         },
       ],
       kind: "dropdown",
+      action: "setColor",
     },
   ],
   interior: [
@@ -255,6 +288,7 @@ export const T1S = {
         },
       ],
       kind: "dropdown",
+      action: "setModel",
     },
     {
       name: "Colors",
@@ -272,6 +306,7 @@ export const T1S = {
         },
       ],
       kind: "dropdown",
+      action: "setColor",
     },
     {
       name: "Floor",
@@ -291,6 +326,7 @@ export const T1S = {
         },
       ],
       kind: "dropdown",
+      action: "setTexture",
     },
     {
       name: "Extra Dash Indicators",
@@ -300,11 +336,13 @@ export const T1S = {
       name: "Vacuum indicator",
       options: ["Yes", "No"],
       kind: "check",
+      action: "setState",
     },
     {
       name: "Central dash",
       options: ["Yes", "No"],
       kind: "check",
+      action: "setState",
     },
   ],
 };

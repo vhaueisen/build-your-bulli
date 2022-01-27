@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { Component } from "react";
 import Chevron from "./../images/Chevron.svg";
-import { ChangeObjectVisibility, EngineEvent } from "./Engine";
+import { EngineEvent } from "./Engine";
 
-export default class Dropdown extends React.Component {
+export default class Dropdown extends Component {
   constructor(props) {
     super(props);
     this.state = { selected: -1 };
@@ -10,16 +10,14 @@ export default class Dropdown extends React.Component {
   }
 
   onLoad = () => {
-    this.updateState();
+    this.handleVisibility();
   };
 
-  updateState(index) {
+  handleVisibility(index) {
     this.props.options.forEach((op, i) => {
       if (op.target != null) {
-        {
-          var state = index == null ? i === this.state.selected : i === index;
-          ChangeObjectVisibility(op.target, state);
-        }
+        var state = index == null ? i === this.state.selected : i === index;
+        this.props.machine.handler[this.props.action](this.props.index, state);
       }
     });
   }
@@ -53,7 +51,7 @@ export default class Dropdown extends React.Component {
                     className="flex-grow-1 dropdown-item s-drop-n"
                     onClick={(e) => {
                       this.setState({ selected: i });
-                      this.updateState(i);
+                      this.handleVisibility(i);
                     }}
                   >
                     <div>{x.name}</div>

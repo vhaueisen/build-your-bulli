@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { ToggleElement } from "./Engine";
 
 export default class Option extends Component {
   constructor(props) {
@@ -10,12 +9,23 @@ export default class Option extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
+  handleVisibility(name) {
+    if (this.props.target != null) {
+      var state = name == null ? this.state.selected : name;
+      console.log(state === this.props.options[0]);
+      this.props.machine.handler[this.props.action](
+        this.props.index,
+        state === this.props.options[0],
+        state
+      );
+    }
+  }
+
   handleInputChange(event) {
     this.setState({
       selected: event.target.value,
     });
-    //console.log("event.target.value");
-    //ToggleElement("Upper_Body", false);
+    this.handleVisibility(event.target.value);
   }
 
   render() {

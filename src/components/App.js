@@ -21,13 +21,13 @@ export default class App extends Component {
           <Route sensitive exact path="/">
             <Home />
           </Route>
-          <Route path="/select" component={BaseSelector}>
+          <Route path="/select">
             <BaseSelector />
           </Route>
-          <Route path="/builder" component={Builder}>
+          <Route path="/builder">
             <Builder />
           </Route>
-          <Route path="/quote" component={Quote}>
+          <Route path="/quote">
             <Quote />
           </Route>
         </Switch>
