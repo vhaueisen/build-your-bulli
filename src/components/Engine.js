@@ -80,6 +80,7 @@ export const Engine = {
   offsetY: -0.35,
   glass: null,
   controls: null,
+  cube: null,
 };
 
 export function Render(ref) {
@@ -94,6 +95,7 @@ export function Render(ref) {
     0.1,
     100
   );
+  window.addEventListener("resize", () => onWindowResize(ref));
   Engine.renderer.setSize(Engine.size.w, Engine.size.h);
   Engine.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   Engine.camera.position.x = Engine.cameras[0].position.x;
@@ -108,6 +110,7 @@ export function Render(ref) {
   Engine.controls.maxPolarAngle = Math.PI / 2 - 0.2;
   Engine.controls.minDistance = 3.5;
   Engine.controls.maxDistance = 10;
+  Engine.controls.enablePan = false;
   let exrCubeRenderTarget, exrBackground;
   THREE.DefaultLoadingManager.onLoad = function () {
     Engine.pmremGenerator.dispose();
@@ -150,6 +153,7 @@ export function Render(ref) {
         // Dispatch loaded event
         var evt = new Event("Loaded");
         EngineEvent.dispatchEvent(evt);
+        Engine.cube = exrCubeRenderTarget.texture;
       });
     });
   Engine.pmremGenerator.compileEquirectangularShader();
@@ -163,27 +167,57 @@ export function Render(ref) {
 export function ChangeObjectVisibility(names, state) {
   [].concat(names || []).forEach((n) => {
     var object = Engine.scene.getObjectByName(n);
-    if (object != null && object.isMesh) object.visible = state;
-    console.log(object);
+    if (object != null) object.visible = state;
   });
 }
 
-export function ChangeObjectColor(names, color) {
+export function ChangeObjectColor(names, color, metallic) {
   [].concat(names || []).forEach((n) => {
-    var object = Engine.scene.getObjectByName(n);
-    if (object != null && object.isMesh) {
-      const c = new THREE.Color(
-        "rgb(" +
-          color
-            .match(/[A-Za-z0-9]{2}/g)
-            .map(function (v) {
-              return parseInt(v, 16);
-            })
-            .join(",") +
-          ")"
-      );
-      object.material.color = c;
-    }
+    Engine.scene.traverse(function (child) {
+      if (child.material && child.material.name === n) {
+        child.material.color = new THREE.Color(
+          "rgb(" +
+            color
+              .match(/[A-Za-z0-9]{2}/g)
+              .map(function (v) {
+                return parseInt(v, 16);
+              })
+              .join(",") +
+            ")"
+        );
+      }
+    });
+  });
+}
+
+export function ChangeObjectColorMetallic(names, color) {
+  [].concat(names || []).forEach((n) => {
+    Engine.scene.traverse(function (child) {
+      if (child.material && child.material.name === n) {
+        if (color === "chrome") {
+          child.material.metalnessMap = null;
+          child.material.roughnessMap = null;
+          child.material.metalness = 0.8;
+          child.material.roughness = 0.075;
+          child.material.color = new THREE.Color("rgb(219,224,225)");
+        } else {
+          child.material.color = new THREE.Color(
+            "rgb(" +
+              color
+                .match(/[A-Za-z0-9]{2}/g)
+                .map(function (v) {
+                  return parseInt(v, 16);
+                })
+                .join(",") +
+              ")"
+          );
+          child.material.metalnessMap = null;
+          child.material.roughnessMap = null;
+          child.material.metalness = 0.25;
+          child.material.roughness = 0.18;
+        }
+      }
+    });
   });
 }
 
@@ -209,14 +243,18 @@ export function ToggleCamera(i) {
 export const tick = () => {
   Engine.controls.update();
   Engine.renderer.render(Engine.scene, Engine.camera);
-  // console.log(
-  //   `Position: ${JSON.stringify(
-  //     Engine.camera.position
-  //   )} Rotation: ${JSON.stringify(
-  //     Engine.camera.rotation
-  //   )} Target: ${JSON.stringify(Engine.controls.target)}`
-  // );
-
-  //console.log(Engine.controls.getDistance());
+  Engine.scene.background = Engine.cube;
   requestAnimationFrame(tick);
 };
+
+function onWindowResize(ref) {
+  if (!ref.mount) return;
+  Engine.size = {
+    w: ref.mount.offsetWidth,
+    h: window.innerHeight,
+  };
+  Engine.camera.aspect = Engine.size.w / Engine.size.h;
+  Engine.camera.updateProjectionMatrix();
+
+  Engine.renderer.setSize(Engine.size.w, Engine.size.h);
+}

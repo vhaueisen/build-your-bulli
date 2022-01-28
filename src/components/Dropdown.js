@@ -9,15 +9,11 @@ export default class Dropdown extends Component {
     EngineEvent.addEventListener("Loaded", this.onLoad);
   }
 
-  onLoad = () => {
-    this.handleVisibility();
-  };
-
-  handleVisibility(index) {
-    this.props.options.forEach((op, i) => {
+  handleChange(index) {
+    this.setState({ selected: index });
+    this.props.options.forEach((op) => {
       if (op.target != null) {
-        var state = index == null ? i === this.state.selected : i === index;
-        this.props.machine.handler[this.props.action](this.props.index, state);
+        this.props.machine.handler[this.props.action](this.props.index, index);
       }
     });
   }
@@ -34,12 +30,18 @@ export default class Dropdown extends Component {
           {this.state.selected < 0
             ? this.props.name
             : this.props.options[this.state.selected].name}
-          <img src={Chevron} className="s-drop-i" alt="..." />
+          <img src={Chevron} className="s-drop-i" alt="" />
         </button>
         <ul className="dropdown-menu w-100 s-drop-ul">
-          {this.props.options.map((x, i) => {
+          {[{ name: this.props.name }, ...this.props.options].map((x, i) => {
             return (
-              <li key={i} className="s-drop-li">
+              <li
+                key={i}
+                className="s-drop-li"
+                onClick={() => {
+                  if (i > 0) this.handleChange(i - 1);
+                }}
+              >
                 <div className="d-flex flex-row">
                   {x.color != null && (
                     <div
@@ -48,11 +50,9 @@ export default class Dropdown extends Component {
                     ></div>
                   )}
                   <div
-                    className="flex-grow-1 dropdown-item s-drop-n"
-                    onClick={(e) => {
-                      this.setState({ selected: i });
-                      this.handleVisibility(i);
-                    }}
+                    className={`flex-grow-1 dropdown-item s-drop-n ${
+                      i === 0 ? "disabled" : ""
+                    }`}
                   >
                     <div>{x.name}</div>
                     {x.desc != null && (

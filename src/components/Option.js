@@ -4,28 +4,19 @@ export default class Option extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected: this.props.options[this.props.options.length - 1],
+      selected: this.props.options.length - 1,
     };
-    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  handleVisibility(name) {
-    if (this.props.target != null) {
-      var state = name == null ? this.state.selected : name;
-      console.log(state === this.props.options[0]);
-      this.props.machine.handler[this.props.action](
-        this.props.index,
-        state === this.props.options[0],
-        state
-      );
-    }
-  }
-
-  handleInputChange(event) {
+  handleChange(event) {
+    var i = parseInt(event.target.value);
     this.setState({
-      selected: event.target.value,
+      selected: i,
     });
-    this.handleVisibility(event.target.value);
+    if (this.props.target) {
+      this.props.machine.handler[this.props.action](this.props.index, i);
+    }
   }
 
   render() {
@@ -39,13 +30,11 @@ export default class Option extends Component {
                 <input
                   className="form-check-input s-check-i"
                   type="checkbox"
-                  checked={this.state.selected === this.props.options[i]}
-                  value={this.props.options[i]}
-                  onChange={this.handleInputChange}
+                  checked={this.state.selected === i}
+                  value={i}
+                  onChange={this.handleChange}
                 />
-                <label className="form-check-label">
-                  {this.props.options[i]}
-                </label>
+                <label className="form-check-label">{x}</label>
               </div>
             );
           })}

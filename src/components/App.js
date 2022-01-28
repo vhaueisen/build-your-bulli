@@ -7,11 +7,15 @@ import Home from "./Home";
 import BaseSelector from "./BaseSelector";
 import Builder from "./Builder";
 import Quote from "./Quote";
+import Report from "./Report";
+import { T1S } from "./../Model/T1S";
+import StateMachine from "./StateMachine";
 
 export default class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { machine: new StateMachine(T1S) };
+    this.state.machine.updateState = (m) => this.setState({ machine: m });
   }
 
   render() {
@@ -25,10 +29,13 @@ export default class App extends Component {
             <BaseSelector />
           </Route>
           <Route path="/builder">
-            <Builder />
+            <Builder machine={this.state.machine} />
           </Route>
           <Route path="/quote">
-            <Quote />
+            <Quote machine={this.state.machine} />
+          </Route>
+          <Route path="/report">
+            <Report machine={this.state.machine} />
           </Route>
         </Switch>
       </Router>

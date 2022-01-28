@@ -278,7 +278,7 @@ input[type="checkbox"]:focus {
 }
 
 .quote-price {
-  font-family: "Allerta";
+  font-family: "Aller";
   font-style: normal;
   font-weight: 500;
   font-size: 50px;
@@ -287,13 +287,69 @@ input[type="checkbox"]:focus {
   color: rgba(0, 0, 0, 0.5);
 }
 
+.quote-title {
+  font-family: "Aller";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 25px;
+  letter-spacing: 0.036px;
+  color: #000;
+}
+
+.quote-desc {
+  font-family: "Aller";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: -0.08px;
+  color: #333;
+}
+
+.quote-header1 {
+  font-family: "Aller";
+  font-style: normal;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 15px;
+  color: #000;
+}
+
+.quote-header2 {
+  font-family: "Aller";
+  font-style: normal;
+  font-weight: bold;
+  font-size: 19px;
+  line-height: 23px;
+  color: #8a8a8a;
+  border-bottom: solid 1px black;
+  padding-bottom: 3px;
+}
+
+.quote-content {
+  font-family: "Aller";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 11px;
+  line-height: 13px;
+  color: #333333;
+}
+
 .quote-request {
   border: 1px solid #e5e5ea;
   box-sizing: border-box;
   border-radius: 8px;
-  height: 8.25rem;
+  height: 8.25rem !important;
 }
 
 .squareColor {
   width: 52px;
+}
+
+.print {
+  width: 210mm;
+  min-height: 297mm;
+  margin-left: auto;
+  margin-right: auto;
 }
