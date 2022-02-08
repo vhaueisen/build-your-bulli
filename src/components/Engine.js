@@ -53,17 +53,9 @@ export const Engine = {
       target: { x: 0, y: 0, z: 0 },
     },
     {
-      position: {
-        x: -0.33,
-        y: 1.1,
-        z: 0.79,
-      },
+      position: { x: -0.33, y: 1.15, z: 0.79 },
       rotation: [2.47, -0.47, -2.8],
-      target: {
-        x: 0,
-        y: 1.15,
-        z: 1.3,
-      },
+      target: { x: 0, y: 1.17, z: 1.3 },
     },
   ],
   transparentKey: "transparent_shader",
@@ -159,7 +151,7 @@ export function Render(ref) {
   Engine.pmremGenerator.compileEquirectangularShader();
   Engine.renderer.toneMapping = THREE.ACESFilmicToneMapping;
   Engine.renderer.outputEncoding = THREE.sRGBEncoding;
-  Engine.renderer.toneMappingExposure = 0.85;
+  Engine.renderer.toneMappingExposure = 0.875;
   tick();
   return Engine.renderer.domElement;
 }
@@ -243,7 +235,7 @@ export function ToggleCamera(i) {
 export const tick = () => {
   Engine.controls.update();
   Engine.renderer.render(Engine.scene, Engine.camera);
-  Engine.scene.background = Engine.cube;
+  //Engine.scene.background = Engine.cube;
   requestAnimationFrame(tick);
 };
 

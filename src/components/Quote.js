@@ -2,21 +2,30 @@ import React, { Component } from "react";
 import kombiPic from "./../images/kombi.png";
 import { Fade } from "react-reveal";
 import Report from "./Report";
-import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
 export default class Quote extends Component {
   pdf = () => {
-    var printDiv = document.getElementById("printable");
-    html2canvas(printDiv, {
-      onclone: function (clonedDoc) {
-        clonedDoc.getElementById("printable").style.display = "block";
+    document.getElementById("printable").style.display = "block";
+    let pdf = new jsPDF("p", "pt", "a4");
+    let pWidth = pdf.internal.pageSize.width;
+    let srcWidth = document.getElementById("printable").clientWidth;
+    let margin = 18;
+    let scale = (pWidth - margin * 2) / srcWidth;
+    pdf.html(document.getElementById("printable"), {
+      x: margin,
+      y: margin,
+      html2canvas: {
+        scale: scale,
       },
-    }).then((canvas) => {
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF();
-      pdf.addImage(imgData, "JPEG", 0, 0);
-      pdf.save(`Build you Bus_${new Date().toDateString()}.pdf`);
+      callback: function () {
+        window.open(
+          pdf.output("bloburl", {
+            filename: `Build you Bus_${new Date().toDateString()}.pdf`,
+          })
+        );
+        document.getElementById("printable").style.display = "none";
+      },
     });
   };
 

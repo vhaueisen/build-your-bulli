@@ -67,7 +67,8 @@ export default class StateMachine {
       this.model[k].forEach((item, j) => {
         if (item.lock && item.lock.id === id) {
           item.lock.state = state;
-          if (!item.lock.control) this.defaultAction({ key: k, i: j }, item);
+          if (!item.lock.control && !state)
+            this.defaultAction({ key: k, i: j }, item);
         }
       });
     });

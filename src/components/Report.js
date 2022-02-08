@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import hangar from "./../images/hangar.png";
 import "./App.css";
+import "../fonts/jsPDF-Aller";
 
 export default class Report extends Component {
   constructor(props) {
@@ -77,7 +78,7 @@ export default class Report extends Component {
             <img
               src={hangar}
               alt="..."
-              className="img-fluid align-self-center"
+              className="img-fluid align-self-center h-logo"
             />
           </div>
         </div>
