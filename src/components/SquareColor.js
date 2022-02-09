@@ -5,8 +5,8 @@ export default class SquareColor extends Component {
     return (
       <div className="squareColor" onClick={() => this.props.click()}>
         <svg
-          width="60"
-          height="60"
+          width="40"
+          height="40"
           viewBox="0 0 60 60"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"

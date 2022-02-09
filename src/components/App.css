@@ -45,10 +45,21 @@
   color: #000000;
   letter-spacing: 0.36px;
 }
+.fh {
+  min-height: 100vh;
+}
+
+#root,
+body,
+html {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
 
 #root h1 {
-  font-size: 105px;
-  line-height: 127px;
+  font-size: 81px;
+  line-height: 100px;
 }
 
 #root h2 {
@@ -84,10 +95,13 @@
   text-decoration: none;
 }
 
+.l-gray {
+  background: #f3f3f3;
+}
+
 .g-container {
   background: #f3f3f3;
   margin: 0;
-  height: 100vh;
   overflow: hidden;
 }
 
@@ -206,6 +220,7 @@
   max-height: 24px;
   margin-left: 10px;
   margin-top: 2px;
+  border: solid #999 1px;
 }
 
 .s-drop-p {
@@ -344,7 +359,7 @@ input[type="checkbox"]:focus {
 }
 
 .squareColor {
-  width: 52px;
+  width: 38px;
 }
 
 .print {
@@ -360,4 +375,40 @@ input[type="checkbox"]:focus {
 
 .h-logo {
   max-width: 100px;
+}
+
+@media (max-width: 767.98px) {
+  #root h1 {
+    font-size: 50px !important;
+  }
+
+  #root h1 {
+    font-size: 40px;
+    line-height: 50px;
+  }
+
+  #root h2 {
+    font-size: 40px;
+    line-height: 50px;
+  }
+
+  #root h3 {
+    font-size: 30px;
+    line-height: 36px;
+  }
+
+  #root h4 {
+    font-size: 54px;
+    line-height: 61px;
+  }
+
+  #root h5 {
+    font-size: 17px;
+    line-height: 20px;
+  }
+
+  #root h6 {
+    font-size: 15px;
+    line-height: 18px;
+  }
 }

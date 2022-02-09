@@ -21,35 +21,10 @@ var EngineEventHandler = function (options) {
 export const EngineEvent = new EngineEventHandler();
 
 export const Engine = {
-  Elements: [
-    {
-      name: "Bottom_Body",
-      contents: ["Mesh003_1"],
-      state: true,
-    },
-    {
-      name: "Upper_Body",
-      contents: ["Mesh003_4"],
-      state: true,
-    },
-    {
-      name: "transparent_shader",
-      contents: [
-        "pasted__transparent_shader_001",
-        "pasted__transparent_shader_002",
-      ],
-      state: true,
-    },
-    {
-      name: "wallet",
-      contents: ["polySurface3"],
-      state: true,
-    },
-  ],
   cameras: [
     {
-      position: { x: 0, y: 1.25, z: 4.4 },
-      rotation: [0, 0, 0],
+      position: { x: -2.21, y: 2.17, z: 3.58 },
+      rotation: [-0.57, -0.5, -0.3],
       target: { x: 0, y: 0, z: 0 },
     },
     {
@@ -78,7 +53,7 @@ export const Engine = {
 export function Render(ref) {
   Engine.size = {
     w: ref.mount.offsetWidth,
-    h: window.innerHeight,
+    h: window.innerWidth < 768 ? 0.75 * window.innerHeight : window.innerHeight,
   };
   Engine.pmremGenerator = new THREE.PMREMGenerator(Engine.renderer);
   Engine.camera = new THREE.PerspectiveCamera(
@@ -213,6 +188,14 @@ export function ChangeObjectColorMetallic(names, color) {
   });
 }
 
+export function saveAsImage() {
+  ToggleCamera(0);
+  Engine.renderer.render(Engine.scene, Engine.camera);
+  customized = Engine.renderer.domElement.toDataURL();
+}
+
+export var customized = "";
+
 export function ToggleCamera(i) {
   if (i === 1) {
     Engine.controls.minDistance = 0.015;
@@ -235,7 +218,11 @@ export function ToggleCamera(i) {
 export const tick = () => {
   Engine.controls.update();
   Engine.renderer.render(Engine.scene, Engine.camera);
-  //Engine.scene.background = Engine.cube;
+  // console.log(
+  //   Engine.camera.position,
+  //   Engine.camera.rotation,
+  //   Engine.controls.target
+  // );
   requestAnimationFrame(tick);
 };
 
@@ -243,7 +230,7 @@ function onWindowResize(ref) {
   if (!ref.mount) return;
   Engine.size = {
     w: ref.mount.offsetWidth,
-    h: window.innerHeight,
+    h: window.innerWidth < 768 ? 0.75 * window.innerHeight : window.innerHeight,
   };
   Engine.camera.aspect = Engine.size.w / Engine.size.h;
   Engine.camera.updateProjectionMatrix();

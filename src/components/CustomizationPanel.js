@@ -3,6 +3,7 @@ import Option from "./Option";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import ColorPicker from "./ColorPicker";
+import { saveAsImage } from "./Engine";
 
 export default class CustomizationPanel extends Component {
   render() {
@@ -47,7 +48,11 @@ export default class CustomizationPanel extends Component {
                 );
             }
         })}
-        <Link to="/quote" className="btn btn-dark mt-5 p-3 w-100 mb-4">
+        <Link
+          to="/quote"
+          className="btn btn-dark mt-5 p-3 w-100 mb-4"
+          onClick={() => saveAsImage()}
+        >
           GET YOUR QUOTE
         </Link>
       </div>

@@ -14,7 +14,7 @@ export default class StateMachine {
         model.selected = model.options[i];
         this.HandleVisibility(model, model.selected === "Yes");
         if (model.lock && model.lock.control)
-          this.onLock(model.lock, model.selected === "Yes");
+          this.onLockd(model.lock, model.selected === "Yes");
       },
       setModel: (index, i) => {
         model = this.fromIndex(index);
@@ -68,6 +68,22 @@ export default class StateMachine {
         if (item.lock && item.lock.id === id) {
           item.lock.state = state;
           if (!item.lock.control && !state)
+            this.defaultAction({ key: k, i: j }, item);
+        }
+      });
+    });
+
+    if (this.updateState) this.updateState(this);
+  }
+
+  onLockd(lock, state) {
+    var id = lock.id;
+    var keys = ["interior", "exterior"];
+    keys.forEach((k) => {
+      this.model[k].forEach((item, j) => {
+        if (item.lock && item.lock.id === id) {
+          item.lock.state = state;
+          if (!item.lock.control && state)
             this.defaultAction({ key: k, i: j }, item);
         }
       });
