@@ -3,6 +3,7 @@ import { Fade } from "react-reveal";
 import Report from "./Report";
 import jsPDF from "jspdf";
 import { customized } from "./Engine";
+import ReactDOMServer from "react-dom/server";
 
 export default class Quote extends Component {
   state = {
@@ -12,43 +13,57 @@ export default class Quote extends Component {
     msg: null,
   };
 
-  pdf = (onComplete) => {
-    document.getElementById("printable").style.display = "block";
+  componentDidMount() {
+    this.pdf();
+  }
+
+  pdf = () => {
     let pdf = new jsPDF("p", "pt", "a4");
     let pWidth = pdf.internal.pageSize.width;
     let srcWidth = document.getElementById("printable").clientWidth;
-    let margin = 18;
+    let margin = 9;
     let scale = (pWidth - margin * 2) / srcWidth;
-    pdf.html(document.getElementById("printable"), {
-      x: margin,
-      y: margin,
-      html2canvas: {
-        scale: scale,
-      },
-      callback: () => {
-        onComplete(pdf);
-        document.getElementById("printable").style.display = "none";
-      },
-    });
-  };
-
-  save = (pdf) => {
-    window.open(
-      pdf.output("bloburl", {
-        filename: `Build you Bus_${new Date().toDateString()}.pdf`,
-      })
+    pdf.html(
+      ReactDOMServer.renderToStaticMarkup(
+        <Report machine={this.props.machine} />
+      ),
+      {
+        x: margin,
+        y: margin,
+        html2canvas: {
+          scale: scale,
+        },
+        callback: () => {
+          this.pdf_document = pdf.output("datauristring", {
+            filename: `Build you Bus_${new Date().toDateString()}.pdf`,
+          });
+          this.blob();
+        },
+      }
     );
   };
 
-  send = (pdf) => {
-    var bytes = pdf.output("datauristring", {
-      filename: `Build you Bus_${new Date().toDateString()}.pdf`,
+  blob = () => {
+    fetch(this.pdf_document)
+      .then((res) => res.blob())
+      .then((blob) => {
+        this.pdf_blob_url = URL.createObjectURL(blob);
+      });
+  };
+
+  save = () => {
+    this.setState({
+      msg: null,
     });
+    window.open(this.pdf_blob_url);
+  };
+
+  send = () => {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        content: bytes,
+        content: this.pdf_document,
         user: {
           name: this.state.name,
           email: this.state.email,
@@ -77,12 +92,12 @@ export default class Quote extends Component {
           msg: "Your quote has been received succesfully!",
         },
       });
-      this.pdf(this.send);
+      this.send();
     }
   };
 
   formChange = (e) => {
-    const target = event.target;
+    const target = e.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
 
@@ -161,32 +176,34 @@ export default class Quote extends Component {
                   />
                 </div>
                 <button
-                  onClick={() => this.pdf(this.save)}
-                  className="btn btn-light mt-5 p-3 w-100 mb-3 border-dark"
-                >
-                  PRINT AND SAVE
-                </button>
-                <button
-                  className="btn btn-dark p-3 w-100 mb-4"
+                  className="btn btn-dark p-3 w-100 mt-5"
                   type="submit"
                   value="Submit"
                 >
                   GET YOUR QUOTE
                 </button>
-                {this.state.msg && this.state.msg.msg && (
-                  <div
-                    className={`alert alert-${this.state.msg.type} mt-2`}
-                    role="alert"
-                  >
-                    {this.state.msg.msg}
-                  </div>
-                )}
               </form>
+              <button
+                onClick={this.save}
+                className="btn btn-light mt-3 p-3 w-100 mb-3 border-dark"
+              >
+                PRINT AND SAVE
+              </button>
+              {this.state.msg && this.state.msg.msg && (
+                <div
+                  className={`alert alert-${this.state.msg.type} fade show mt-2 fadeOut`}
+                  role="alert"
+                >
+                  <strong>{this.state.msg.msg}</strong>
+                </div>
+              )}
             </div>
           </div>
-          <div className="print" id="printable" style={{ display: "none" }}>
-            <Report machine={this.props.machine} />
-          </div>
+          <div
+            className="print"
+            id="printable"
+            style={{ visibility: "hidden", minHeight: "1px" }}
+          ></div>
         </div>
       </div>
     );

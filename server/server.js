@@ -22,6 +22,10 @@ app.get("/", (req, res) => {
   res.status(200).send(template());
 });
 
+app.get("*", (req, res) => {
+  res.redirect("/");
+});
+
 app.post("/api", (req, res, next) => {
   res.status(201).json({
     message: "Sucessfully submitted quote",

@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import kombiPic from "./../images/kombi.png";
-import { Link } from "react-router-dom";
 import { Fade } from "react-reveal";
 
 export default class BaseSelector extends Component {
@@ -13,38 +11,21 @@ export default class BaseSelector extends Component {
               <h4>Choose your base model</h4>
             </div>
             <div className="row">
-              <Fade bottom>
-                <div className="col-md-3 p-5 b-select">
-                  <Link to="/builder">
-                    <img src={kombiPic} alt="..." className="img-fluid mb-3" />
-                    <h6>T1 Standard</h6>
-                  </Link>
-                </div>
-              </Fade>
-              <Fade bottom>
-                <div className="col-md-3 p-5 b-select">
-                  <Link to="/builder">
-                    <img src={kombiPic} alt="..." className="img-fluid mb-3" />
-                    <h6>T1 “Samba”</h6>
-                  </Link>
-                </div>
-              </Fade>
-              <Fade bottom>
-                <div className="col-md-3 p-5 b-select">
-                  <Link to="/builder">
-                    <img src={kombiPic} alt="..." className="img-fluid mb-3" />
-                    <h6>T1 Single Cab</h6>
-                  </Link>
-                </div>
-              </Fade>
-              <Fade bottom>
-                <div className="col-md-3 p-5 b-select">
-                  <Link to="/builder">
-                    <img src={kombiPic} alt="..." className="img-fluid mb-3" />
-                    <h6>T1,5</h6>
-                  </Link>
-                </div>
-              </Fade>
+              {this.props.models.map((m, i) => {
+                return (
+                  <Fade bottom key={i}>
+                    <div className="col-md-3 p-5 b-select">
+                      <div
+                        onClick={() => this.props.onSelect(i)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        <img src={m.img} alt="..." className="img-fluid mb-3" />
+                        <h6>{m.name}</h6>
+                      </div>
+                    </div>
+                  </Fade>
+                );
+              })}
             </div>
           </div>
         </div>

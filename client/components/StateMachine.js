@@ -122,7 +122,7 @@ export default class StateMachine {
     if (item.action) {
       if (item.action === "setColorPicker") {
         this.handler[item.action](index, 0, p_colors[0]);
-        this.handler[item.action](index, 1, p_colors[0]);
+        this.handler[item.action](index, 1, p_colors[p_colors.length - 1]);
       } else if (item.action === "setState") {
         this.handler[item.action](index, item.options.length - 1);
       } else if (item.action === "setModel") {

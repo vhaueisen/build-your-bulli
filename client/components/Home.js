@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import kombiPic from "./../images/kombi.png";
+import T1Simg from "./../images/T1S.png";
 import { Link } from "react-router-dom";
 import { Fade } from "react-reveal";
 
@@ -24,7 +24,7 @@ export default class Home extends Component {
             </Fade>
             <Fade right cascade>
               <div className="col-lg-7 p-5">
-                <img src={kombiPic} className="img-fluid p-5" alt="..." />
+                <img src={T1Simg} className="img-fluid p-5" alt="..." />
               </div>
             </Fade>
           </div>

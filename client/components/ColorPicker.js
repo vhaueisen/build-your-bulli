@@ -6,7 +6,7 @@ export default class ColorPicker extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected: [0, 0],
+      selected: [0, 29],
     };
   }
 

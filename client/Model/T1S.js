@@ -1,5 +1,8 @@
+import T1Simg from "./../images/T1S.png";
+
 export const T1S = {
   name: "T1 Standard",
+  img: T1Simg,
   desc: "1493 cm³ engine with 	32 kW / 44 PS	(from 1965)",
   exterior: [
     {
