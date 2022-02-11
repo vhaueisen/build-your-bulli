@@ -6,25 +6,19 @@ import kombiModel from "./../3d/models/Kombi.glb";
 import ambientTexture from "./../3d/textures/Ambient.exr";
 
 var EngineEventHandler = function (options) {
-  // Create a DOM EventTarget object
   var target = document.createTextNode(null);
-
-  // Pass EventTarget interface calls to DOM EventTarget object
   this.addEventListener = target.addEventListener.bind(target);
   this.removeEventListener = target.removeEventListener.bind(target);
   this.dispatchEvent = target.dispatchEvent.bind(target);
-
-  // Room your your constructor code
 };
-
-// Create an instance of your event target
 export const EngineEvent = new EngineEventHandler();
 
 export const Engine = {
+  progress: 0,
   cameras: [
     {
-      position: { x: -2.21, y: 2.17, z: 3.58 },
-      rotation: [-0.57, -0.5, -0.3],
+      position: { x: -2.25, y: 1, z: 3 },
+      rotation: [0, 0, 0],
       target: { x: 0, y: 0, z: 0 },
     },
     {
@@ -40,15 +34,28 @@ export const Engine = {
   renderer: new THREE.WebGLRenderer({
     alpha: true,
   }),
+  glass: null,
   pmremGenerator: null,
   size: null,
   camera: null,
   modelscale: 1,
-  offsetY: -0.35,
-  glass: null,
+  offsetY: -0.5,
   controls: null,
   cube: null,
 };
+
+Engine.glass = new THREE.MeshPhysicalMaterial({
+  color: 0xb1becf,
+  metalness: 0,
+  roughness: 0,
+  ior: 1.5,
+  envMap: Engine.exrBackground,
+  envMapIntensity: 1,
+  transmission: 0.2,
+  opacity: 0.35,
+  side: THREE.DoubleSide,
+  transparent: true,
+});
 
 export function Render(ref) {
   Engine.size = {
@@ -65,68 +72,70 @@ export function Render(ref) {
   window.addEventListener("resize", () => onWindowResize(ref));
   Engine.renderer.setSize(Engine.size.w, Engine.size.h);
   Engine.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  Engine.camera.position.x = Engine.cameras[0].position.x;
-  Engine.camera.position.y = Engine.cameras[0].position.y;
-  Engine.camera.position.z = Engine.cameras[0].position.z;
+
   Engine.controls = new OrbitControls(
     Engine.camera,
     Engine.renderer.domElement
   );
   Engine.controls.enableDamping = true;
-  Engine.controls.minPolarAngle = 0.2;
+  Engine.controls.minPolarAngle = Math.PI / 2 - 0.75;
   Engine.controls.maxPolarAngle = Math.PI / 2 - 0.2;
-  Engine.controls.minDistance = 3.5;
-  Engine.controls.maxDistance = 10;
+  Engine.controls.rotateSpeed = 0.3;
   Engine.controls.enablePan = false;
+  ToggleCamera(0);
   let exrCubeRenderTarget, exrBackground;
   THREE.DefaultLoadingManager.onLoad = function () {
     Engine.pmremGenerator.dispose();
   };
-  Engine.exrLoader
-    .setDataType(THREE.UnsignedByteType)
-    .load(ambientTexture, function (texture) {
+  Engine.exrLoader.setDataType(THREE.UnsignedByteType).load(
+    ambientTexture,
+    function (texture) {
       exrCubeRenderTarget = Engine.pmremGenerator.fromEquirectangular(texture);
       exrBackground = exrCubeRenderTarget.texture;
       texture.dispose();
-      Engine.gltfLoader.load(kombiModel, function (gltf) {
-        gltf.scene.scale.set(
-          Engine.modelscale,
-          Engine.modelscale,
-          Engine.modelscale
-        );
-        gltf.scene.position.y = Engine.offsetY;
-        gltf.scene.traverse((node) => {
-          if (node.isMesh) {
-            if (node.name.includes(Engine.transparentKey))
-              node.material = new THREE.MeshPhysicalMaterial({
-                color: 0xb1becf,
-                metalness: 0,
-                roughness: 0,
-                ior: 1.5,
-                envMap: Engine.exrBackground,
-                envMapIntensity: 1,
-                transmission: 0.2,
-                opacity: 0.35,
-                side: THREE.DoubleSide,
-                transparent: true,
-              });
-            node.material.envMap = exrBackground;
-          }
-        });
-        Engine.scene.add(gltf.scene);
-        ref.setState({
-          loading: false,
-        });
-        // Dispatch loaded event
-        var evt = new Event("Loaded");
-        EngineEvent.dispatchEvent(evt);
-        Engine.cube = exrCubeRenderTarget.texture;
+      Engine.gltfLoader.load(
+        kombiModel,
+        function (gltf) {
+          gltf.scene.scale.set(
+            Engine.modelscale,
+            Engine.modelscale,
+            Engine.modelscale
+          );
+          gltf.scene.position.y = Engine.offsetY;
+          gltf.scene.traverse((node) => {
+            if (node.isMesh) {
+              if (node.name.includes(Engine.transparentKey))
+                node.material = Engine.glass;
+              node.material.envMap = exrBackground;
+            }
+          });
+          Engine.scene.add(gltf.scene);
+          ref.setState({
+            loading: false,
+          });
+          // Dispatch loaded event
+          var evt = new Event("Loaded");
+          EngineEvent.dispatchEvent(evt);
+          Engine.cube = exrCubeRenderTarget.texture;
+        },
+        function (progress) {
+          ref.setState({
+            progress:
+              (1 / 30) * 100 + ((29 / 30) * 100 * progress.loaded) / 32088551.6,
+          });
+        }
+      );
+    },
+    function (progress) {
+      ref.setState({
+        progress: ((1 / 30) * 100 * progress.loaded) / progress.total,
       });
-    });
+    }
+  );
   Engine.pmremGenerator.compileEquirectangularShader();
   Engine.renderer.toneMapping = THREE.ACESFilmicToneMapping;
   Engine.renderer.outputEncoding = THREE.sRGBEncoding;
-  Engine.renderer.toneMappingExposure = 0.875;
+  Engine.renderer.toneMappingExposure = 0.895;
   tick();
   return Engine.renderer.domElement;
 }
@@ -138,7 +147,7 @@ export function ChangeObjectVisibility(names, state) {
   });
 }
 
-export function ChangeObjectColor(names, color, metallic) {
+export function ChangeObjectColor(names, color) {
   [].concat(names || []).forEach((n) => {
     Engine.scene.traverse(function (child) {
       if (child.material && child.material.name === n) {
@@ -158,6 +167,22 @@ export function ChangeObjectColor(names, color, metallic) {
 }
 
 export function ChangeObjectColorMetallic(names, color) {
+  const setColor = (child, color) => {
+    child.material.color = new THREE.Color(
+      "rgb(" +
+        color
+          .match(/[A-Za-z0-9]{2}/g)
+          .map(function (v) {
+            return parseInt(v, 16);
+          })
+          .join(",") +
+        ")"
+    );
+    child.material.metalnessMap = null;
+    child.material.roughnessMap = null;
+    child.material.metalness = 0.25;
+    child.material.roughness = 0.18;
+  };
   [].concat(names || []).forEach((n) => {
     Engine.scene.traverse(function (child) {
       if (child.material && child.material.name === n) {
@@ -167,21 +192,12 @@ export function ChangeObjectColorMetallic(names, color) {
           child.material.metalness = 0.8;
           child.material.roughness = 0.075;
           child.material.color = new THREE.Color("rgb(219,224,225)");
+        } else if (color === "secondary") {
+          setColor(child, global.sColor.color);
+        } else if (color === "primary") {
+          setColor(child, global.pColor.color);
         } else {
-          child.material.color = new THREE.Color(
-            "rgb(" +
-              color
-                .match(/[A-Za-z0-9]{2}/g)
-                .map(function (v) {
-                  return parseInt(v, 16);
-                })
-                .join(",") +
-              ")"
-          );
-          child.material.metalnessMap = null;
-          child.material.roughnessMap = null;
-          child.material.metalness = 0.25;
-          child.material.roughness = 0.18;
+          setColor(child, color);
         }
       }
     });
@@ -198,11 +214,11 @@ export var customized = "";
 
 export function ToggleCamera(i) {
   if (i === 1) {
-    Engine.controls.minDistance = 0.015;
-    Engine.controls.maxDistance = 0.64;
+    Engine.controls.minDistance = 0.005;
+    Engine.controls.maxDistance = 0.2;
   } else {
-    Engine.controls.minDistance = 3.5;
-    Engine.controls.maxDistance = 10;
+    Engine.controls.minDistance = 3.75;
+    Engine.controls.maxDistance = 6;
   }
   Engine.controls.reset();
   Engine.camera.position.x = Engine.cameras[i].position.x;

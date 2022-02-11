@@ -37,6 +37,17 @@ export default class CustomizationPanel extends Component {
                     machine={this.props.machine}
                   ></Dropdown>
                 );
+              case "dropdownColor":
+                return (
+                  <Dropdown
+                    {...item}
+                    key={i}
+                    index={{ key: this.props.index, i: i }}
+                    machine={this.props.machine}
+                    options={item.pool}
+                    colorDrop
+                  ></Dropdown>
+                );
               case "colorPicker":
                 return (
                   <ColorPicker

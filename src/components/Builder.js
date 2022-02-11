@@ -7,7 +7,7 @@ export default class Builder extends Component {
     return (
       <div className="container-fluid">
         <div className="row">
-          <Game />
+          <Game machine={this.props.machine} />
           <Sidebar machine={this.props.machine} />
         </div>
       </div>

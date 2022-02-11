@@ -7,84 +7,9 @@ export const T1S = {
       kind: "header",
     },
     {
-      name: ["Top", "Down"],
+      name: ["Primary", "Secondary"],
+      options: ["p_colors", "p_colors"],
       kind: "colorPicker",
-      options: [
-        [
-          "#9b9e89",
-          "#063d3a",
-          "#d3dbc4",
-          "#0d1929",
-          "#2e5332",
-          "#650c1e",
-          "#08546e",
-          "#5a7f1f",
-          "#d49b04",
-          "#872c0d",
-          "#7ba51b",
-          "#153765",
-          "#0f6713",
-          "#702714",
-          "#d6cf9b",
-          "#225a8b",
-          "#46b1d1",
-          "#930801",
-          "#b81906",
-          "#bd5d09",
-          "#0a2749",
-          "#daab03",
-          "#e3dfd3",
-          "#715c23",
-          "#257ab0",
-          "#b1120c",
-          "#4b7900",
-          "#5b090d",
-          "#245f7d",
-          "#babc51",
-          "#589d67",
-          "#1e96af",
-          "#051931",
-          "#c5b881",
-          "#47a5c1",
-        ],
-        [
-          "#47a5c1",
-          "#c5b881",
-          "#051931",
-          "#1e96af",
-          "#589d67",
-          "#babc51",
-          "#245f7d",
-          "#5b090d",
-          "#4b7900",
-          "#b1120c",
-          "#257ab0",
-          "#715c23",
-          "#e3dfd3",
-          "#daab03",
-          "#0a2749",
-          "#bd5d09",
-          "#b81906",
-          "#930801",
-          "#46b1d1",
-          "#225a8b",
-          "#d6cf9b",
-          "#702714",
-          "#0f6713",
-          "#153765",
-          "#7ba51b",
-          "#872c0d",
-          "#d49b04",
-          "#5a7f1f",
-          "#08546e",
-          "#650c1e",
-          "#2e5332",
-          "#0d1929",
-          "#d3dbc4",
-          "#063d3a",
-          "#9b9e89",
-        ],
-      ],
       action: "setColorPicker",
       target: [
         ["t1m1_color2", "t1m2_color2"],
@@ -93,21 +18,30 @@ export const T1S = {
       selected: [0, 0],
     },
     {
-      name: "Choose frontal logo color",
+      header: "Roof",
+      name: "Choose color",
+      pool: "s_colors",
+      target: "",
+      kind: "dropdownColor",
+      action: "setColorDropdown",
+    },
+    {
+      header: "Frontal Logo",
+      name: "Choose color",
       options: [
+        {
+          name: "Primary",
+          color: "primary",
+          target: "t1m2_colorlogo",
+        },
+        {
+          name: "Secondary",
+          color: "secondary",
+          target: "t1m2_colorlogo",
+        },
         {
           name: "No color insert / pure chrome",
           color: "chrome",
-          target: "t1m2_colorlogo",
-        },
-        {
-          name: "Black",
-          color: "#000000",
-          target: "t1m2_colorlogo",
-        },
-        {
-          name: "Color 01",
-          color: "#A94246",
           target: "t1m2_colorlogo",
         },
       ],
@@ -138,7 +72,8 @@ export const T1S = {
       kind: "header",
     },
     {
-      name: "Model",
+      header: "Model",
+      name: "Choose model",
       options: [
         {
           name: "Standard",
@@ -161,20 +96,11 @@ export const T1S = {
       lock: { id: "curtainLock", state: false, control: true },
     },
     {
-      name: "Curtain color",
-      options: [
-        {
-          name: "Color 01",
-          color: "#00000",
-          target: "t1m3_colorcurtain",
-        },
-        {
-          name: "Color 02",
-          color: "#ff5b4c",
-          target: "t1m3_colorcurtain",
-        },
-      ],
-      kind: "dropdown",
+      header: "Curtain",
+      name: "Choose color",
+      pool: "t_colors",
+      target: "t1m3_colorcurtain",
+      kind: "dropdownColor",
       action: "setColorDropdown",
       lock: { id: "curtainLock", state: false },
     },
@@ -195,7 +121,8 @@ export const T1S = {
       lock: { id: "luggageLock", state: false, control: true },
     },
     {
-      name: "Model",
+      header: "Model",
+      name: "Choose Model",
       options: [
         {
           name: "Front",
@@ -228,7 +155,8 @@ export const T1S = {
       kind: "header",
     },
     {
-      name: "Front",
+      header: "Frontal",
+      name: "Choose model",
       options: [
         {
           name: "Model 1",
@@ -244,7 +172,8 @@ export const T1S = {
       action: "setModel",
     },
     {
-      name: "Back",
+      header: "Back",
+      name: "Choose model",
       options: [
         {
           name: "Model 1",
@@ -264,7 +193,7 @@ export const T1S = {
       kind: "header",
     },
     {
-      name: "Model",
+      name: "Choose model",
       options: [
         {
           name: "Model 1",
@@ -291,21 +220,22 @@ export const T1S = {
       lock: { id: "moldingLock", state: false, control: true },
     },
     {
-      name: "Choose strip Color",
+      header: "Strip Color",
+      name: "Choose color",
       options: [
+        {
+          name: "Primary",
+          color: "primary",
+          target: ["t1m2_colormolding"],
+        },
+        {
+          name: "Secondary",
+          color: "secondary",
+          target: ["t1m2_colormolding"],
+        },
         {
           name: "No color insert / pure chrome",
           color: "chrome",
-          target: ["t1m2_colormolding"],
-        },
-        {
-          name: "Color 01",
-          color: "#00000",
-          target: ["t1m2_colormolding"],
-        },
-        {
-          name: "Color 02",
-          color: "#ff4c42",
           target: ["t1m2_colormolding"],
         },
       ],
@@ -337,7 +267,8 @@ export const T1S = {
       kind: "header",
     },
     {
-      name: "Front",
+      header: "Frontal",
+      name: "Choose model",
       options: [
         {
           name: "Model 1",
@@ -356,7 +287,8 @@ export const T1S = {
       action: "setModel",
     },
     {
-      name: "Back",
+      header: "Back",
+      name: "Choose model",
       options: [
         {
           name: "Model 1",
@@ -376,19 +308,9 @@ export const T1S = {
     },
     {
       name: "How would you like the rims?",
-      options: [
-        {
-          name: "Black",
-          color: "#000000",
-          target: "t1m1_colorwheelrim",
-        },
-        {
-          name: "Color 01",
-          color: "#d6d6d6",
-          target: "t1m1_colorwheelrim",
-        },
-      ],
-      kind: "dropdown",
+      pool: "s_colors",
+      target: "t1m1_colorwheelrim",
+      kind: "dropdownColor",
       action: "setColorDropdown",
     },
     // {
@@ -399,25 +321,11 @@ export const T1S = {
     //   kind: "check",
     // },
     {
-      name: "Choose hubcap color",
-      options: [
-        {
-          name: "Black",
-          color: "#000000",
-          target: "t1m1_colorhubcap",
-        },
-        {
-          name: "Color 01",
-          color: "#e73f39",
-          target: "t1m1_colorhubcap",
-        },
-        {
-          name: "Color 02",
-          color: "#a8ddff",
-          target: "t1m1_colorhubcap",
-        },
-      ],
-      kind: "dropdown",
+      header: "Hubcap",
+      name: "Choose color",
+      pool: "s_colors",
+      target: "t1m1_colorhubcap",
+      kind: "dropdownColor",
       action: "setColorDropdown",
     },
   ],
@@ -427,7 +335,8 @@ export const T1S = {
       kind: "header",
     },
     {
-      name: "Models and materials",
+      header: "Models and materials",
+      name: "Choose model",
       options: [
         {
           name: "Model 1",
@@ -442,91 +351,40 @@ export const T1S = {
       action: "setModel",
     },
     {
-      name: "Primary color",
-      options: [
-        {
-          name: "Color 01",
-          color: "#8c281d",
-          target: ["t1m3_color1", "t1m32_color1"],
-        },
-        {
-          name: "Color 02",
-          color: "#495ad4",
-          target: ["t1m3_color1", "t1m32_color1"],
-        },
-        {
-          name: "Color 03",
-          color: "#fdfdfd",
-          target: ["t1m3_color1", "t1m32_color1"],
-        },
-      ],
-      kind: "dropdown",
+      header: "Primary color",
+      name: "Choose color",
+      pool: "t_colors",
+      target: ["t1m3_color1", "t1m32_color1"],
+      kind: "dropdownColor",
       action: "setColorDropdown",
     },
     {
-      name: "Secondary color",
-      options: [
-        {
-          name: "Color 01",
-          color: "#8c281d",
-          target: ["t1m3_color2", "t1m32_color2"],
-        },
-        {
-          name: "Color 02",
-          color: "#495ad4",
-          target: ["t1m3_color2", "t1m32_color2"],
-        },
-        {
-          name: "Color 03",
-          color: "#fdfdfd",
-          target: ["t1m3_color2", "t1m32_color2"],
-        },
-      ],
-      kind: "dropdown",
+      header: "Secondary color",
+      name: "Choose color",
+      pool: "t_colors",
+      target: ["t1m3_color2", "t1m32_color2"],
+      kind: "dropdownColor",
       action: "setColorDropdown",
     },
     {
-      name: "Terciary color",
-      options: [
-        {
-          name: "Color 01",
-          color: "#8c281d",
-          target: "t1m3_color3",
-        },
-        {
-          name: "Color 02",
-          color: "#495ad4",
-          target: "t1m3_color3",
-        },
-        {
-          name: "Color 03",
-          color: "#fdfdfd",
-          target: "t1m3_color3",
-        },
-      ],
-      kind: "dropdown",
+      header: "Terciary color",
+      name: "Choose color",
+      pool: "t_colors",
+      target: "t1m3_color3",
+      kind: "dropdownColor",
       action: "setColorDropdown",
     },
-    // {
-    //   name: "Floor",
-    //   kind: "header",
-    // },
-    // {
-    //   name: "Material",
-    //   options: [
-    //     {
-    //       name: "Fabric",
-    //     },
-    //     {
-    //       name: "Leather",
-    //     },
-    //     {
-    //       name: "Wood",
-    //     },
-    //   ],
-    //   kind: "dropdown",
-    //   action: "setTexture",
-    // },
+    {
+      name: "Floor",
+      kind: "header",
+    },
+    {
+      name: "Choose color",
+      pool: "t_colors",
+      target: "t1m3_color3",
+      kind: "dropdownColor",
+      action: "setColorDropdown",
+    },
     {
       name: "Extra Dash Indicators",
       kind: "header",

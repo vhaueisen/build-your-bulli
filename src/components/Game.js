@@ -17,11 +17,14 @@ class Game extends Component {
       <>
         <div className="col-lg-9 p-0 m-0 g-container">
           {this.state.loading && (
-            <div className="d-flex justify-content-center">
+            <>
+              <div className="progress-indicator">
+                {Math.trunc(this.state.progress)}%
+              </div>
               <div className="spinner-border loader" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
-            </div>
+            </>
           )}
           <div ref={(ref) => (this.mount = ref)} />
         </div>

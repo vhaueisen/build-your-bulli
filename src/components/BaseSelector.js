@@ -16,7 +16,7 @@ export default class BaseSelector extends Component {
               <Fade bottom>
                 <div className="col-md-3 p-5 b-select">
                   <Link to="/builder">
-                    <img src={kombiPic} alt="..." className="img-fluid" />
+                    <img src={kombiPic} alt="..." className="img-fluid mb-3" />
                     <h6>T1 Standard</h6>
                   </Link>
                 </div>
@@ -24,7 +24,7 @@ export default class BaseSelector extends Component {
               <Fade bottom>
                 <div className="col-md-3 p-5 b-select">
                   <Link to="/builder">
-                    <img src={kombiPic} alt="..." className="img-fluid" />
+                    <img src={kombiPic} alt="..." className="img-fluid mb-3" />
                     <h6>T1 “Samba”</h6>
                   </Link>
                 </div>
@@ -32,7 +32,7 @@ export default class BaseSelector extends Component {
               <Fade bottom>
                 <div className="col-md-3 p-5 b-select">
                   <Link to="/builder">
-                    <img src={kombiPic} alt="..." className="img-fluid" />
+                    <img src={kombiPic} alt="..." className="img-fluid mb-3" />
                     <h6>T1 Single Cab</h6>
                   </Link>
                 </div>
@@ -40,7 +40,7 @@ export default class BaseSelector extends Component {
               <Fade bottom>
                 <div className="col-md-3 p-5 b-select">
                   <Link to="/builder">
-                    <img src={kombiPic} alt="..." className="img-fluid" />
+                    <img src={kombiPic} alt="..." className="img-fluid mb-3" />
                     <h6>T1,5</h6>
                   </Link>
                 </div>

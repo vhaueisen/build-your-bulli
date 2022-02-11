@@ -1,3 +1,4 @@
+import { getPool, p_colors } from "./constants";
 import {
   ChangeObjectColor,
   ChangeObjectVisibility,
@@ -27,18 +28,15 @@ export default class StateMachine {
           if (o.lock) this.onLock(o.lock, !(j === i));
         });
       },
-      setColorPicker: (index, i, j) => {
+      setColorPicker: (index, i, x) => {
         model = this.fromIndex(index);
-        model.selected[i] = model.options[i][j];
-        ChangeObjectColor(model.target[i], model.options[i][j]);
+        model.selected[i] = x.name;
+        ChangeObjectColor(model.target[i], x.color);
       },
       setColorDropdown: (index, i) => {
         model = this.fromIndex(index);
-        model.selected = model.options[i].name;
-        ChangeObjectColor(model.options[i].target, model.options[i].color);
-        model.options.forEach((o, j) => {
-          if (o.lock) this.onLock(o.lock, !(j === i));
-        });
+        model.selected = i.name;
+        ChangeObjectColor(model.target, i.color);
       },
       setMetallicColorDropdown: (index, i) => {
         model = this.fromIndex(index);
@@ -47,9 +45,6 @@ export default class StateMachine {
           model.options[i].target,
           model.options[i].color
         );
-        model.options.forEach((o, j) => {
-          if (o.lock) this.onLock(o.lock, !(j === i));
-        });
       },
     };
 
@@ -74,6 +69,23 @@ export default class StateMachine {
     });
 
     if (this.updateState) this.updateState(this);
+  }
+
+  refreshMainColors() {
+    var keys = ["interior", "exterior"];
+    keys.forEach((k) => {
+      this.model[k].forEach((item, i) => {
+        if (item.options && item.options.length > 0) {
+          const idx = item.options.map((c) => c.name).indexOf(item.selected);
+          if (item.action === "setMetallicColorDropdown" && idx >= 0) {
+            ChangeObjectColorMetallic(
+              item.options[idx].target,
+              item.options[idx].color
+            );
+          }
+        }
+      });
+    });
   }
 
   onLockd(lock, state) {
@@ -109,11 +121,17 @@ export default class StateMachine {
   defaultAction(index, item) {
     if (item.action) {
       if (item.action === "setColorPicker") {
-        this.handler[item.action](index, 0, 0);
-        this.handler[item.action](index, 1, 0);
+        this.handler[item.action](index, 0, p_colors[0]);
+        this.handler[item.action](index, 1, p_colors[0]);
       } else if (item.action === "setState") {
         this.handler[item.action](index, item.options.length - 1);
-      } else this.handler[item.action](index, 0);
+      } else if (item.action === "setModel") {
+        this.handler[item.action](index, 0);
+      } else if (item.action === "setMetallicColorDropdown") {
+        this.handler[item.action](index, 0);
+      } else if (item.action === "setColorDropdown") {
+        this.handler[item.action](index, getPool(item.pool)[0]);
+      }
     }
   }
 

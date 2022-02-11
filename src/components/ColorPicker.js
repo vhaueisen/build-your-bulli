@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import SquareColor from "./SquareColor";
+import { getPool } from "./constants";
 
 export default class ColorPicker extends Component {
   constructor(props) {
@@ -9,16 +10,26 @@ export default class ColorPicker extends Component {
     };
   }
 
-  handleChange(index, j) {
+  handleChange(index, j, c) {
+    if (!c) c = { color: "#000" };
     var s = this.state.selected;
     s[index] = j;
     this.setState({ selected: s });
-    this.props.machine.handler[this.props.action](this.props.index, index, j);
+    if (index === 0) {
+      global.pColor = c;
+      this.props.machine.refreshMainColors();
+    } else {
+      global.sColor = c;
+      this.props.machine.refreshMainColors();
+    }
+    this.props.machine.handler[this.props.action](this.props.index, index, c);
   }
 
   mapPropsToPicker() {
     var r = [];
+
     for (let index = 0; index < this.props.name.length; index++) {
+      var pool = getPool(this.props.options[index]);
       r.push(
         <div
           key={index}
@@ -28,10 +39,10 @@ export default class ColorPicker extends Component {
         >
           <div className="font-light mb-3">{this.props.name[index]}</div>
           <div className="row g-0">
-            {this.props.options[index].map((c, j) => (
+            {pool.map((color, j) => (
               <SquareColor
-                color={c}
-                click={() => this.handleChange(index, j)}
+                color={color.color}
+                click={() => this.handleChange(index, j, color)}
                 selected={this.state.selected[index] === j}
                 index={this.props.options[0].length * index + j}
                 key={j}
