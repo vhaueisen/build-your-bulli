@@ -19,14 +19,20 @@ class Game extends Component {
           {this.state.loading && (
             <>
               <div className="progress-indicator">
-                {Math.trunc(this.state.progress)}%
+                {isNaN(this.state.progress)
+                  ? 0
+                  : Math.trunc(this.state.progress)}
+                %
               </div>
               <div className="spinner-border loader" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
             </>
           )}
-          <div ref={(ref) => (this.mount = ref)} />
+          <div
+            ref={(ref) => (this.mount = ref)}
+            style={{ height: this.state.loading ? "0px" : "" }}
+          />
         </div>
       </>
     );
