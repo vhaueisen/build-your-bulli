@@ -1,51 +1,59 @@
 {
-  "name": "bus-builder",
-  "version": "0.1.0",
-  "private": true,
+  "name": "ern-setup",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon",
+    "build": "webpack --config webpack.config.client.production.js && webpack --mode=production --config webpack.config.server.js",
+    "start": "NODE_ENV=production node ./dist/server.generated.js"
+  },
+  "keywords": [
+    "React",
+    "Node",
+    "Express",
+    "Webpack",
+    "Babel",
+    "Nodemon"
+  ],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
+    "@hot-loader/react-dom": "^17.0.1",
     "@popperjs/core": "^2.10.2",
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^11.2.7",
-    "@testing-library/user-event": "^12.8.3",
     "bootstrap": "^5.1.3",
+    "dotenv": "^10.0.0",
     "express": "^4.17.2",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.0",
     "nodemailer": "^6.7.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-hot-loader": "^4.13.0",
     "react-reveal": "^1.2.2",
     "react-router-dom": "^5.3.0",
-    "react-scripts": "4.0.3",
-    "three": "^0.133.1",
-    "web-vitals": "^1.1.2"
-  },
-  "scripts": {
-    "start": "node src/server.js",
-    "build": "react-scripts build",
-    "dev": "react-scripts start",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "three": "^0.133.1"
   },
   "devDependencies": {
-    "concurrently": "^7.0.0"
+    "@babel/core": "^7.16.5",
+    "@babel/preset-env": "^7.16.5",
+    "@babel/preset-react": "^7.16.5",
+    "autoprefixer": "^10.4.2",
+    "babel-loader": "^8.2.3",
+    "css-loader": "^6.6.0",
+    "file-loader": "^6.2.0",
+    "less": "^4.1.2",
+    "less-loader": "^10.2.0",
+    "nodemon": "^2.0.15",
+    "postcss-loader": "^6.2.1",
+    "sass": "^1.49.7",
+    "sass-loader": "^12.4.0",
+    "style-loader": "^3.3.1",
+    "svg-url-loader": "^7.1.1",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-middleware": "^5.3.0",
+    "webpack-hot-middleware": "^2.25.1",
+    "webpack-node-externals": "^3.0.0"
   }
 }
