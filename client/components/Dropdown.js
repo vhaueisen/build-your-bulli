@@ -43,7 +43,7 @@ export default class Dropdown extends Component {
           </button>
           {this.props.colorDrop === true ? (
             <ul className="dropdown-menu w-100">
-              <div className="row justify-content-center g-0">
+              <div className="row g-0 ps-2">
                 {this.pool.map((c, i) => {
                   return (
                     <SquareColor

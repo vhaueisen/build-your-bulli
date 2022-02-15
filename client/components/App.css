@@ -373,10 +373,11 @@ input[type="checkbox"]:focus {
   aspect-ratio: 1;
   margin: 0.2em;
   border-radius: 8px;
+  border: solid #aaa 1px;
 }
 .squareColor.selected {
   box-shadow: 2px 2px 12px #999;
-  border: solid #999 1px;
+  border: solid #000 1px;
 }
 .squareColor.sm {
   width: 8% !important;
