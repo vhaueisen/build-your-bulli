@@ -115,6 +115,14 @@ html {
   overflow: hidden;
 }
 
+.cp-be {
+  border-right: solid 1px #f3f3f3;
+}
+
+.cp-bb {
+  border-bottom: solid 1px #f3f3f3;
+}
+
 #root .nav-link {
   color: #000;
 }
@@ -448,5 +456,13 @@ input[type="checkbox"]:focus {
   #root h6 {
     font-size: 15px;
     line-height: 18px;
+  }
+
+  .cp-be {
+    border-right: none;
+  }
+
+  .cp-bb {
+    margin-bottom: 1em;
   }
 }

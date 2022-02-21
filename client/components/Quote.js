@@ -11,6 +11,7 @@ export default class Quote extends Component {
     email: "",
     questions: "",
     msg: null,
+    generated: false,
   };
 
   componentDidMount() {
@@ -38,6 +39,7 @@ export default class Quote extends Component {
             filename: `Build you Bus_${new Date().toDateString()}.pdf`,
           });
           this.blob();
+          this.setState({ generated: true });
         },
       }
     );
@@ -199,11 +201,13 @@ export default class Quote extends Component {
               )}
             </div>
           </div>
-          <div
-            className="print"
-            id="printable"
-            style={{ visibility: "hidden", minHeight: "1px" }}
-          ></div>
+          {!this.state.generated && (
+            <div
+              className="print"
+              id="printable"
+              style={{ visibility: "hidden", minHeight: "1px" }}
+            ></div>
+          )}
         </div>
       </div>
     );

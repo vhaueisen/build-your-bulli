@@ -33,8 +33,8 @@ export default class ColorPicker extends Component {
       r.push(
         <div
           key={index}
-          className={`col-sm-6 border-bottom pb-3 ${
-            index !== this.props.name.length - 1 ? "border-end" : ""
+          className={`col-sm-6 cp-bb pb-3 ${
+            index !== this.props.name.length - 1 ? "cp-be" : ""
           }`}
         >
           <div className="font-light mb-3">{this.props.name[index]}</div>

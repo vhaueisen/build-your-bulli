@@ -1,9 +1,13 @@
 import React, { Component } from "react";
-import T1Simg from "./../images/T1S.png";
+import T1S from "./../images/T1S.png";
+import T15 from "./../images/T15.png";
+import T1Samba from "./../images/T1Samba.png";
+import T1SingleCab from "./../images/T1SingleCab.png";
 import { Link } from "react-router-dom";
 import { Fade } from "react-reveal";
 
 export default class Home extends Component {
+  imgPool = [T1S, T1Samba, T15, T1SingleCab];
   render() {
     return (
       <div className="container">
@@ -24,7 +28,15 @@ export default class Home extends Component {
             </Fade>
             <Fade right cascade>
               <div className="col-lg-7 p-5">
-                <img src={T1Simg} className="img-fluid p-5" alt="..." />
+                <img
+                  src={
+                    this.imgPool[
+                      Math.floor(Math.random() * this.imgPool.length)
+                    ]
+                  }
+                  className="img-fluid p-5"
+                  alt="..."
+                />
               </div>
             </Fade>
           </div>

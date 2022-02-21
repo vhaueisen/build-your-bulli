@@ -249,6 +249,10 @@ export function ToggleCamera(i) {
     Engine.controls.minDistance = 0.005;
     Engine.controls.maxDistance = 0.2;
   } else {
+    if (window.innerWidth < 768)
+      Engine.cameras[0].position = { x: -5, y: 1, z: 6 };
+    else Engine.cameras[0].position = { x: -2.25, y: 1, z: 3 };
+
     Engine.controls.minDistance = 3.75;
     Engine.controls.maxDistance = 6;
   }
