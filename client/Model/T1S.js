@@ -1,8 +1,10 @@
 import T1Simg from "./../images/T1S.png";
-
+import bundle from "./../3d/models/T1S.glb";
 export const T1S = {
   name: "T1 Standard",
+  bundle: bundle,
   img: T1Simg,
+  size: 32875596,
   desc: "1493 cm³ engine with 	32 kW / 44 PS	(from 1965)",
   exterior: [
     {
@@ -24,7 +26,7 @@ export const T1S = {
       header: "Roof",
       name: "Choose color",
       pool: "s_colors",
-      target: "",
+      target: ["t1m2_roofcolor", "t1m2_roofmatchcolor"],
       kind: "dropdownColor",
       action: "setColorDropdown",
     },
@@ -93,7 +95,7 @@ export const T1S = {
     {
       name: "Curtains?",
       options: ["Yes", "No"],
-      target: "t1_extra_curtains",
+      target: ["t1_extra_curtains"],
       kind: "check",
       action: "setState",
       lock: { id: "curtainLock", state: false, control: true },
@@ -102,7 +104,7 @@ export const T1S = {
       header: "Curtain",
       name: "Choose color",
       pool: "t_colors",
-      target: "t1m3_colorcurtain",
+      target: ["t1m3_colorcurtain", "t1m2_colorrooffabric"],
       kind: "dropdownColor",
       action: "setColorDropdown",
       lock: { id: "curtainLock", state: false },
@@ -316,18 +318,18 @@ export const T1S = {
       kind: "dropdownColor",
       action: "setColorDropdown",
     },
-    // {
-    //   name: "Volkswagen’s logo on hubcaps?",
-    //   options: ["Yes", "No"],
-    //   target: "t1_extra_logo1",
-    //   action: "setState",
-    //   kind: "check",
-    // },
+    {
+      name: "Volkswagen’s logo on hubcaps?",
+      options: ["Yes", "No"],
+      target: ["t1_extra_hubcap1"],
+      action: "setState",
+      kind: "check",
+    },
     {
       header: "Hubcap",
       name: "Choose color",
       pool: "s_colors",
-      target: "t1m1_colorhubcap",
+      target: ["t1m1_colorhubcap", "t1m1_colorhubcap2"],
       kind: "dropdownColor",
       action: "setColorDropdown",
     },
@@ -343,11 +345,23 @@ export const T1S = {
       options: [
         {
           name: "Model 1",
-          target: "t1_extra_seat1",
+          target: [
+            "t1_extra_seat1",
+            "t1_extra_body1_1",
+            "t1_extra_body2_1",
+            "t1_extra_body3_1",
+            "t1_extra_body4_1",
+          ],
         },
         {
           name: "Model 2",
-          target: "t1_extra_seat2",
+          target: [
+            "t1_extra_seat2",
+            "t1_extra_body1_2",
+            "t1_extra_body2_2",
+            "t1_extra_body3_2",
+            "t1_extra_body4_2",
+          ],
         },
       ],
       kind: "dropdown",
@@ -357,7 +371,7 @@ export const T1S = {
       header: "Primary color",
       name: "Choose color",
       pool: "t_colors",
-      target: ["t1m3_color1", "t1m32_color1"],
+      target: ["t1m3_leatherstrap", "t1m3_seat"],
       kind: "dropdownColor",
       action: "setColorDropdown",
     },
@@ -365,7 +379,7 @@ export const T1S = {
       header: "Secondary color",
       name: "Choose color",
       pool: "t_colors",
-      target: ["t1m3_color2", "t1m32_color2"],
+      target: ["t1m3_seat2", "t1m3_middlebody", "t1m3_middlebody2"],
       kind: "dropdownColor",
       action: "setColorDropdown",
     },
@@ -384,7 +398,7 @@ export const T1S = {
     {
       name: "Choose color",
       pool: "t_colors",
-      target: "t1m3_color3",
+      target: "t1m3_colorfloor",
       kind: "dropdownColor",
       action: "setColorDropdown",
     },

@@ -2,8 +2,12 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { EXRLoader } from "three/examples/jsm/loaders/EXRLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import kombiModel from "./../3d/models/Kombi.glb";
 import ambientTexture from "./../3d/textures/Ambient.exr";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
+import { SSAOPass } from "three/examples/jsm/postprocessing/SSAOPass.js";
+import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader.js";
+import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 
 var EngineEventHandler = function (options) {
   var target = document.createTextNode(null);
@@ -56,8 +60,8 @@ Engine.glass = new THREE.MeshPhysicalMaterial({
   side: THREE.DoubleSide,
   transparent: true,
 });
-
-export function Render(ref) {
+var composer, composer1;
+export function Render(ref, machine) {
   Engine.size = {
     w: ref.mount.offsetWidth,
     h: window.innerWidth < 768 ? 0.75 * window.innerHeight : window.innerHeight,
@@ -87,6 +91,33 @@ export function Render(ref) {
   THREE.DefaultLoadingManager.onLoad = function () {
     Engine.pmremGenerator.dispose();
   };
+
+  // Post Processing
+  // composer = new EffectComposer(Engine.renderer);
+
+  // const ssaoPass = new SSAOPass(
+  //   Engine.scene,
+  //   Engine.camera,
+  //   Engine.size.w,
+  //   Engine.size.h
+  // );
+  // ssaoPass.kernelRadius = 16;
+  // composer.addPass(ssaoPass);
+
+  // const renderPass = new RenderPass(Engine.scene, Engine.camera);
+  // const fxaaPass = new ShaderPass(FXAAShader);
+  // const pixelRatio = Engine.renderer.getPixelRatio();
+
+  // fxaaPass.material.uniforms["resolution"].value.x =
+  //   1 / (Engine.size.w * pixelRatio);
+  // fxaaPass.material.uniforms["resolution"].value.y =
+  //   1 / (Engine.size.h * pixelRatio);
+
+  // composer1 = new EffectComposer(Engine.renderer);
+  // composer1.addPass(renderPass);
+  // composer1.addPass(fxaaPass);
+
+  //
   Engine.exrLoader.setDataType(THREE.UnsignedByteType).load(
     ambientTexture,
     function (texture) {
@@ -94,7 +125,7 @@ export function Render(ref) {
       exrBackground = exrCubeRenderTarget.texture;
       texture.dispose();
       Engine.gltfLoader.load(
-        kombiModel,
+        machine.model.bundle,
         function (gltf) {
           gltf.scene.scale.set(
             Engine.modelscale,
@@ -121,7 +152,8 @@ export function Render(ref) {
         function (progress) {
           ref.setState({
             progress:
-              (1 / 30) * 100 + ((29 / 30) * 100 * progress.loaded) / 32088551.6,
+              (1 / 30) * 100 +
+              ((29 / 30) * 100 * progress.loaded) / machine.model.size,
           });
         }
       );
@@ -239,6 +271,8 @@ export const tick = () => {
   //   Engine.camera.rotation,
   //   Engine.controls.target
   // );
+  //composer.render();
+  //composer.render();
   requestAnimationFrame(tick);
 };
 

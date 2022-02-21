@@ -16,10 +16,13 @@ import Report from "./Report";
 import { T1S } from "./../Model/T1S";
 import StateMachine from "./StateMachine";
 import { hot } from "react-hot-loader/root";
+import { T1Samba } from "../Model/T1Samba";
+import { T15 } from "../Model/T15";
+import { T1SingleCab } from "../Model/T1SingleCab";
 
 class App extends Component {
   state = { machine: null };
-  models = [T1S];
+  models = [T1S, T1Samba, T15, T1SingleCab];
 
   createMachine(i) {
     let m = new StateMachine(this.models[i]);

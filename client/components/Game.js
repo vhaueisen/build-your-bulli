@@ -9,7 +9,7 @@ class Game extends Component {
   }
 
   componentDidMount() {
-    this.mount.appendChild(Render(this));
+    this.mount.appendChild(Render(this, this.props.machine));
   }
 
   render() {
