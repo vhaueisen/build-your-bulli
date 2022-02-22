@@ -3,6 +3,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { EXRLoader } from "three/examples/jsm/loaders/EXRLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import ambientTexture from "./../3d/textures/Ambient.exr";
+import floor from "./../3d/models/Floor.glb";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { SSAOPass } from "three/examples/jsm/postprocessing/SSAOPass.js";
 import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader.js";
@@ -91,7 +92,25 @@ export function Render(ref, machine) {
   THREE.DefaultLoadingManager.onLoad = function () {
     Engine.pmremGenerator.dispose();
   };
+  Engine.renderer.shadowMap.enabled = true;
+  Engine.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
 
+  const planeGeometry = new THREE.PlaneGeometry(64, 64, 4, 4);
+  const planeMaterial = new THREE.MeshStandardMaterial({ color: 0xcccccc });
+  const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+  plane.rotateX(-Math.PI / 2);
+  plane.receiveShadow = true;
+  plane.position.y = Engine.offsetY;
+  Engine.scene.add(plane);
+
+  directionalLight.castShadow = true;
+  directionalLight.shadow.mapSize.width = 128; // default
+  directionalLight.shadow.mapSize.height = 128; // default
+  directionalLight.shadow.camera.near = 0.5; // default
+  directionalLight.shadow.camera.far = 20; // default
+  directionalLight.shadow.shadowDarkness = 2;
+  Engine.scene.add(directionalLight);
   // Post Processing
   // composer = new EffectComposer(Engine.renderer);
 
@@ -124,6 +143,7 @@ export function Render(ref, machine) {
       exrCubeRenderTarget = Engine.pmremGenerator.fromEquirectangular(texture);
       exrBackground = exrCubeRenderTarget.texture;
       texture.dispose();
+      plane.material.envMap = exrBackground;
       Engine.gltfLoader.load(
         machine.model.bundle,
         function (gltf) {
@@ -133,8 +153,10 @@ export function Render(ref, machine) {
             Engine.modelscale
           );
           gltf.scene.position.y = Engine.offsetY;
+          gltf.scene.castShadow = true;
           gltf.scene.traverse((node) => {
             if (node.isMesh) {
+              node.castShadow = true;
               if (node.name.includes(Engine.transparentKey))
                 node.material = Engine.glass;
               node.material.envMap = exrBackground;
@@ -168,6 +190,7 @@ export function Render(ref, machine) {
   Engine.renderer.toneMapping = THREE.ACESFilmicToneMapping;
   Engine.renderer.outputEncoding = THREE.sRGBEncoding;
   Engine.renderer.toneMappingExposure = 0.895;
+
   tick();
   return Engine.renderer.domElement;
 }
