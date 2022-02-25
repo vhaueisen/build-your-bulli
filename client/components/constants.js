@@ -94,8 +94,11 @@ export const p_colors = [
 // ];
 export const s_colors = p_colors;
 export const t_colors = p_colors;
-global.pColor = p_colors[0];
-global.sColor = p_colors[0];
+
+export const resetGlobal = () => {
+  global.pColor = p_colors[0];
+  global.sColor = p_colors[0];
+};
 
 export const getPool = (index) => {
   return index === "s_colors"
@@ -104,3 +107,5 @@ export const getPool = (index) => {
     ? t_colors
     : p_colors;
 };
+
+resetGlobal();

@@ -1,4 +1,4 @@
-import { getPool, p_colors } from "./constants";
+import { getPool, p_colors, resetGlobal } from "./constants";
 import {
   ChangeObjectColor,
   ChangeObjectVisibility,
@@ -108,7 +108,7 @@ export default class StateMachine {
   onLoad = () => {
     var keys = ["interior", "exterior"];
     var locks = [];
-
+    resetGlobal();
     keys.forEach((k) => {
       this.model[k].forEach((item, i) => {
         if (item.lock && item.lock.control)
@@ -117,6 +117,7 @@ export default class StateMachine {
       });
     });
     locks.forEach((l) => l());
+
     this.loaded = true;
   };
 
