@@ -68,6 +68,7 @@ export default class StateMachine {
       });
     });
 
+    console.log("hey");
     if (this.updateState) this.updateState(this);
   }
 
@@ -107,6 +108,7 @@ export default class StateMachine {
   onLoad = () => {
     var keys = ["interior", "exterior"];
     var locks = [];
+
     keys.forEach((k) => {
       this.model[k].forEach((item, i) => {
         if (item.lock && item.lock.control)

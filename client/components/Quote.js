@@ -4,8 +4,9 @@ import Report from "./Report";
 import jsPDF from "jspdf";
 import { customized } from "./Engine";
 import ReactDOMServer from "react-dom/server";
+import { withRouter } from "react-router";
 
-export default class Quote extends Component {
+class Quote extends Component {
   state = {
     name: "",
     email: "",
@@ -123,74 +124,84 @@ export default class Quote extends Component {
               </Fade>
             </div>
             <div className="col-lg-4 p-5 mx-height align-self-center">
-              <h4>{this.props.machine.model.name.toUpperCase()}</h4>
-              <div className="font-light mb-2">
-                {this.props.machine.model.desc.toUpperCase()}
-              </div>
+              <Fade cascade right>
+                <h4>{this.props.machine.model.name.toUpperCase()}</h4>
+              </Fade>
+              <Fade cascade right>
+                <div className="font-light mb-2">
+                  {this.props.machine.model.desc.toUpperCase()}
+                </div>
+              </Fade>
               <hr />
 
-              <form onSubmit={(e) => this.submit(e)}>
-                <div className="form-group">
-                  <label htmlFor="InputName" className="font-light mt-5 mb-2">
-                    <b>Full Name</b>*
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="InputName"
-                    aria-describedby="name"
-                    placeholder="Enter name..."
-                    name="name"
-                    value={this.state.name}
-                    onChange={this.formChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="InputEmail" className="font-light mt-3 mb-2">
-                    <b>E-mail</b>*
-                  </label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="InputEmail"
-                    aria-describedby="email"
-                    placeholder="your@email.com"
-                    name="email"
-                    value={this.state.email}
-                    onChange={this.formChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <label
-                    htmlFor="InputComments"
-                    className="font-light mt-5 mb-2"
+              <Fade cascade right>
+                <form onSubmit={(e) => this.submit(e)}>
+                  <div className="form-group">
+                    <label htmlFor="InputName" className="font-light mt-5 mb-2">
+                      <b>Full Name</b>*
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="InputName"
+                      aria-describedby="name"
+                      placeholder="Enter name..."
+                      name="name"
+                      value={this.state.name}
+                      onChange={this.formChange}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label
+                      htmlFor="InputEmail"
+                      className="font-light mt-3 mb-2"
+                    >
+                      <b>E-mail</b>*
+                    </label>
+                    <input
+                      type="email"
+                      className="form-control"
+                      id="InputEmail"
+                      aria-describedby="email"
+                      placeholder="your@email.com"
+                      name="email"
+                      value={this.state.email}
+                      onChange={this.formChange}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label
+                      htmlFor="InputComments"
+                      className="font-light mt-5 mb-2"
+                    >
+                      <b>Any questions or special requests?</b> (Optional)
+                    </label>
+                    <textarea
+                      type="textarea"
+                      className="quote-request form-control"
+                      id="InputComments"
+                      placeholder="Enter questions..."
+                      name="questions"
+                      value={this.state.questions}
+                      onChange={this.formChange}
+                    />
+                  </div>
+                  <button
+                    onClick={this.save}
+                    className="btn btn-light mt-5 p-3 w-100 mb-3 border-dark"
+                    type="button"
                   >
-                    <b>Any questions or special requests?</b> (Optional)
-                  </label>
-                  <textarea
-                    type="textarea"
-                    className="quote-request form-control"
-                    id="InputComments"
-                    placeholder="Enter questions..."
-                    name="questions"
-                    value={this.state.questions}
-                    onChange={this.formChange}
-                  />
-                </div>
-                <button
-                  className="btn btn-dark p-3 w-100 mt-5"
-                  type="submit"
-                  value="Submit"
-                >
-                  GET YOUR QUOTE
-                </button>
-              </form>
-              <button
-                onClick={this.save}
-                className="btn btn-light mt-3 p-3 w-100 mb-3 border-dark"
-              >
-                PRINT AND SAVE
-              </button>
+                    PRINT AND SAVE
+                  </button>
+                  <button
+                    className="btn btn-dark p-3 w-100 mt-2"
+                    type="submit"
+                    value="Submit"
+                  >
+                    GET YOUR QUOTE
+                  </button>
+                </form>
+              </Fade>
               {this.state.msg && this.state.msg.msg && (
                 <div
                   className={`alert alert-${this.state.msg.type} fade show mt-2 fadeOut`}
@@ -213,3 +224,5 @@ export default class Quote extends Component {
     );
   }
 }
+
+export default withRouter(Quote);

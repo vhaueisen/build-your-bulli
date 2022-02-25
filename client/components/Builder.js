@@ -7,8 +7,8 @@ export default class Builder extends Component {
     return (
       <div className="container-fluid">
         <div className="row">
-          <Game machine={this.props.machine} />
-          <Sidebar machine={this.props.machine} />
+          <Game machine={this.props.machine} key={0} />
+          <Sidebar machine={this.props.machine} key={1} />
         </div>
       </div>
     );

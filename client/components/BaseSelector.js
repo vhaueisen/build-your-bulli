@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Fade } from "react-reveal";
+import { withRouter } from "react-router";
 
-export default class BaseSelector extends Component {
+class BaseSelector extends Component {
   render() {
     return (
       <div className="container">
@@ -13,10 +14,13 @@ export default class BaseSelector extends Component {
             <div className="row">
               {this.props.models.map((m, i) => {
                 return (
-                  <Fade bottom key={i}>
+                  <Fade bottom key={i} delay={i * 350}>
                     <div className="col-md-3 p-5 b-select">
                       <div
-                        onClick={() => this.props.onSelect(i)}
+                        onClick={() => {
+                          this.props.onSelect(i);
+                          this.props.history.push("/builder/exterior");
+                        }}
                         style={{ cursor: "pointer" }}
                       >
                         <img src={m.img} alt="..." className="img-fluid mb-3" />
@@ -33,3 +37,5 @@ export default class BaseSelector extends Component {
     );
   }
 }
+
+export default withRouter(BaseSelector);

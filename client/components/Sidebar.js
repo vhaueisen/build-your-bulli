@@ -5,7 +5,6 @@ import {
   Switch,
   withRouter,
   useParams,
-  Redirect,
 } from "react-router-dom";
 import CustomizationPanel from "./CustomizationPanel";
 import { ToggleCamera } from "./Engine";
@@ -57,9 +56,6 @@ class Sidebar extends Component {
         <Switch>
           <Route path={`${path}/:id`}>
             <Menu machine={this.props.machine} />
-          </Route>
-          <Route path={path}>
-            <Redirect to={`${url}/exterior`} push />
           </Route>
         </Switch>
       </div>

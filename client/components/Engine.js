@@ -17,7 +17,7 @@ export const Engine = {
   progress: 0,
   cameras: [
     {
-      position: { x: -2.25, y: 1, z: 3 },
+      position: { x: -2.25, y: 1, z: -3 },
       rotation: [0, 0, 0],
       target: { x: 0, y: 0, z: 0 },
     },
@@ -30,11 +30,8 @@ export const Engine = {
   transparentKey: "transparent_shader",
   gltfLoader: new GLTFLoader(),
   exrLoader: new EXRLoader(),
-  scene: new THREE.Scene(),
-  renderer: new THREE.WebGLRenderer({
-    alpha: true,
-    antialias: true,
-  }),
+  scene: null,
+  renderer: null,
   glass: null,
   pmremGenerator: null,
   size: null,
@@ -59,10 +56,15 @@ Engine.glass = new THREE.MeshPhysicalMaterial({
 });
 
 export function Render(ref, machine) {
+  Engine.renderer = new THREE.WebGLRenderer({
+    alpha: true,
+    antialias: true,
+  });
   Engine.size = {
     w: ref.mount.offsetWidth,
     h: window.innerWidth < 768 ? 0.75 * window.innerHeight : window.innerHeight,
   };
+  Engine.scene = new THREE.Scene();
   Engine.pmremGenerator = new THREE.PMREMGenerator(Engine.renderer);
   Engine.camera = new THREE.PerspectiveCamera(
     75,
@@ -250,8 +252,8 @@ export function ToggleCamera(i) {
     Engine.controls.maxDistance = 0.2;
   } else {
     if (window.innerWidth < 768)
-      Engine.cameras[0].position = { x: -5, y: 1, z: 6 };
-    else Engine.cameras[0].position = { x: -2.25, y: 1, z: 3 };
+      Engine.cameras[0].position = { x: 4.0, y: 1, z: 6 };
+    else Engine.cameras[0].position = { x: 3, y: 1, z: 4 };
 
     Engine.controls.minDistance = 3.75;
     Engine.controls.maxDistance = 6;

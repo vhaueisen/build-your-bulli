@@ -21,8 +21,11 @@ import { T15 } from "../Model/T15";
 import { T1SingleCab } from "../Model/T1SingleCab";
 
 class App extends Component {
-  state = { machine: null };
-  models = [T1S, T1Samba, T15, T1SingleCab];
+  constructor(props) {
+    super(props);
+    this.state = { machine: null };
+    this.models = [T1S, T1Samba, T15, T1SingleCab];
+  }
 
   createMachine(i) {
     let m = new StateMachine(this.models[i]);
@@ -38,14 +41,10 @@ class App extends Component {
             <Home />
           </Route>
           <Route path="/select">
-            {this.state.machine != null ? (
-              <Redirect to="/builder" />
-            ) : (
-              <BaseSelector
-                models={this.models}
-                onSelect={(i) => this.createMachine(i)}
-              />
-            )}
+            <BaseSelector
+              models={this.models}
+              onSelect={(i) => this.createMachine(i)}
+            />
           </Route>
           <Route path="/builder">
             <Builder machine={this.state.machine} />
