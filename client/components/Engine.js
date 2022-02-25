@@ -3,12 +3,6 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { EXRLoader } from "three/examples/jsm/loaders/EXRLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import ambientTexture from "./../3d/textures/Ambient.exr";
-import floor from "./../3d/models/Floor.glb";
-import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
-import { SSAOPass } from "three/examples/jsm/postprocessing/SSAOPass.js";
-import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader.js";
-import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
-import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 
 var EngineEventHandler = function (options) {
   var target = document.createTextNode(null);
@@ -17,6 +11,7 @@ var EngineEventHandler = function (options) {
   this.dispatchEvent = target.dispatchEvent.bind(target);
 };
 export const EngineEvent = new EngineEventHandler();
+var plane;
 
 export const Engine = {
   progress: 0,
@@ -38,6 +33,7 @@ export const Engine = {
   scene: new THREE.Scene(),
   renderer: new THREE.WebGLRenderer({
     alpha: true,
+    antialias: true,
   }),
   glass: null,
   pmremGenerator: null,
@@ -61,7 +57,7 @@ Engine.glass = new THREE.MeshPhysicalMaterial({
   side: THREE.DoubleSide,
   transparent: true,
 });
-var composer, composer1;
+
 export function Render(ref, machine) {
   Engine.size = {
     w: ref.mount.offsetWidth,
@@ -94,11 +90,15 @@ export function Render(ref, machine) {
   };
   Engine.renderer.shadowMap.enabled = true;
   Engine.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+  const directionalLight = new THREE.DirectionalLight(0xfff0f0, 0.75);
 
-  const planeGeometry = new THREE.PlaneGeometry(64, 64, 4, 4);
-  const planeMaterial = new THREE.MeshStandardMaterial({ color: 0xcccccc });
-  const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+  const planeGeometry = new THREE.PlaneGeometry(128, 128, 4, 4);
+  const planeMaterial = new THREE.MeshPhysicalMaterial({
+    color: 0xffffff,
+    metalness: 0.3,
+    roughness: 0.175,
+  });
+  plane = new THREE.Mesh(planeGeometry, planeMaterial);
   plane.rotateX(-Math.PI / 2);
   plane.receiveShadow = true;
   plane.position.y = Engine.offsetY;
@@ -107,36 +107,11 @@ export function Render(ref, machine) {
   directionalLight.castShadow = true;
   directionalLight.shadow.mapSize.width = 128; // default
   directionalLight.shadow.mapSize.height = 128; // default
-  directionalLight.shadow.camera.near = 0.5; // default
-  directionalLight.shadow.camera.far = 20; // default
-  directionalLight.shadow.shadowDarkness = 2;
+  directionalLight.shadow.camera.near = 0.05; // default
+  directionalLight.shadow.camera.far = 10; // default
+  directionalLight.shadow.shadowDarkness = 1;
   Engine.scene.add(directionalLight);
-  // Post Processing
-  // composer = new EffectComposer(Engine.renderer);
 
-  // const ssaoPass = new SSAOPass(
-  //   Engine.scene,
-  //   Engine.camera,
-  //   Engine.size.w,
-  //   Engine.size.h
-  // );
-  // ssaoPass.kernelRadius = 16;
-  // composer.addPass(ssaoPass);
-
-  // const renderPass = new RenderPass(Engine.scene, Engine.camera);
-  // const fxaaPass = new ShaderPass(FXAAShader);
-  // const pixelRatio = Engine.renderer.getPixelRatio();
-
-  // fxaaPass.material.uniforms["resolution"].value.x =
-  //   1 / (Engine.size.w * pixelRatio);
-  // fxaaPass.material.uniforms["resolution"].value.y =
-  //   1 / (Engine.size.h * pixelRatio);
-
-  // composer1 = new EffectComposer(Engine.renderer);
-  // composer1.addPass(renderPass);
-  // composer1.addPass(fxaaPass);
-
-  //
   Engine.exrLoader.setDataType(THREE.UnsignedByteType).load(
     ambientTexture,
     function (texture) {
@@ -261,8 +236,10 @@ export function ChangeObjectColorMetallic(names, color) {
 
 export function saveAsImage() {
   ToggleCamera(0);
+  plane.visible = false;
   Engine.renderer.render(Engine.scene, Engine.camera);
   customized = Engine.renderer.domElement.toDataURL();
+  plane.visible = true;
 }
 
 export var customized = "";
