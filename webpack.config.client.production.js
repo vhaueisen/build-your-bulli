@@ -8,7 +8,7 @@ const config = {
     output: {
         path: path.join(CURRENT_WORKING_DIR, "/dist"),
         filename: "bundle.js",
-        publicPath: "/build-your-bulli/dist/",
+        publicPath: "/build-your-bulli/",
     },
     module: {
         rules: [
