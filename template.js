@@ -1,5 +1,5 @@
 export default () => {
-  return `<!DOCTYPE html>
+    return `<!DOCTYPE html>
   <html lang="en">
     <head>
       <meta charset="utf-8" />
@@ -11,7 +11,7 @@ export default () => {
     <body>
       <noscript>You need to enable JavaScript to run this app.</noscript>
       <div id="root"></div>
-       <script type="text/javascript" src="/dist/bundle.js"> 
+       <script type="text/javascript" src="/build-your-bulli/dist/bundle.js"> 
       </script>
       </body>
      </html>`;
